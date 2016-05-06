@@ -1,0 +1,111 @@
+/* Style for Body*/
+body{
+    background-color: #F2F5F8; /* Background of BOE*/
+}
+/* Style for Inputs in form of new records*/
+input, input[type="number"], input[type="date"], input[type="text"]{
+    width: 100%;
+    padding: 6px 6px;
+    border: 1px solid #93B2D0;
+    border-radius: 2px;
+    background-color:#FAFBFC;
+}
+/* Style for Inputs in form validate records*/
+.error{
+    border-color: #CF2A0E;
+}
+/* Style for TextArea*/
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 6px 6px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-color:#FAFBFC;
+    resize: none;
+    border-color: #93B2D0;
+}
+/* Style for Select*/
+select {
+    width: 100%;
+    padding: 6px 6px;
+    border-color: #93B2D0;
+    border-radius: 2px;
+    background-color:#FAFBFC;
+}
+.details-table{
+	border: none;
+	margin: 0px;
+}
+.details-table td.title{
+	font-weight: bold;
+}
+/*The Span label prefix input */
+span.prefix, label.prefix {
+    background: #5E759A;
+    border-right: none;
+    color: #fff;
+    border-color: #93B2D0;
+}
+/*The Span label postfix input */
+span.postfix, label.postfix {
+    background: #5E759A;
+    border-right: none;
+    color: #fff;
+    border-color: #93B2D0;
+}
+/* The Modal (background) */
+.modalapp {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modalapp-content {
+    background-color: #F2F5F8;
+    margin: auto;
+    padding: 15px;
+    padding-bottom: 0px;
+    border: 1px solid #93B2D0;
+    width: 350px;
+}
+/* Modal Header */
+.modalapp-header {
+    padding: 0.5em;
+}
+/* The Close Button */
+.closemodal{
+    color: #aaaaaa;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+.closemodal:hover,
+.closemodal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+   background: url('../images/details_close.png') no-repeat center center;
+}
+.loader {
+	width:100%;
+	height:100%;
+	z-index:50;
+  	background: rgba(255, 255, 255, 0.7) url('../images/gears.gif') no-repeat center 80px;
+  	display: none;
+  	position: absolute;
+}
