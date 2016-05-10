@@ -107,7 +107,7 @@ public class OpportunityImplementation implements OpportunityData {
 			preparedStatement.setObject( 7, (opportunity.getIDTimeEnd() != 0) ? opportunity.getIDTimeEnd() : null);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-		} catch (SQLException e) {
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
 	}
