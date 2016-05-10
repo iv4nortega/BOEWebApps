@@ -1,5 +1,6 @@
 /*
  * @author Ivan Hernández Ortega
+ * 
  */
 var delIdRecord = null;
 $(document).ajaxStart(function() {
@@ -85,7 +86,6 @@ $(document).ready(function() {
 	        ],
 	  		select: true, 
 	  		ordering: true,
-	  		 
 	  	    language : {
 	  	      emptyTable     : 'No existen registros.',
 	  	      zeroRecords    : 'No se encontraron resultados.',
