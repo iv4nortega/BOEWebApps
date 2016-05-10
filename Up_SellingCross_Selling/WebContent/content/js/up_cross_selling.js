@@ -1,3 +1,6 @@
+/*
+ * @author Ivan Hernández Ortega
+ */
 var delIdRecord = null;
 $(document).ajaxStart(function() {
     $(".loader").show();
@@ -10,6 +13,7 @@ $(document).ready(function() {
 	GetCustomerList();
 	/*MASK FOR COSTO*/
 	$('#new_record_amount').number( true, 2 );
+	/*MASK FOR PROBABILITY*/
 	$('#new_record_probability').number( true, 0 );
 	$("#new_record_probability").on("blur", function() {
         var value = $(this).val().length == 1 ? $(this).val() + '%' : $(this).val();
