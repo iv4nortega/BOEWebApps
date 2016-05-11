@@ -7,7 +7,8 @@ import com.finance.models.*;
 /**
  * @author Ivan Hernández Ortega
  */
-public interface OpportunityData {
+public interface OpportunityData 
+{
 	public void addOpportunity(OpportunityModel opportunity);
 	public void deleteOpportunity(int opportunityId );
 	public void updateOpportunity(OpportunityModel opportunity);

@@ -23,40 +23,46 @@ public class DBUtil
 	public static Connection getConnection() 
 	{
 		if( conn != null)
+		{
 			return conn;
-		InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream( "/db.properties" );
-		Properties properties = new Properties();
-		try 
-		{
-			properties.load( inputStream );
-			String driver = properties.getProperty("driver");
-			String url = properties.getProperty("url");
-			String user = properties.getProperty("user");
-			String password = properties.getProperty("password");
-			Class.forName(driver);
-			conn = DriverManager.getConnection( url, user, password );
-		} 
-		catch (IOException e) 
-		{
-			System.out.println(e.toString());
-			//e.printStackTrace();
-		} 
-		catch (ClassNotFoundException e) 
-		{
-			System.out.println(e.toString());
-			//e.printStackTrace();
 		}
-		catch (SQLException e) 
+		else
 		{
-			System.out.println(e.toString());
-			//e.printStackTrace();
+			InputStream inputStream = 
+					DBUtil.class.getClassLoader().getResourceAsStream( "/db.properties" );
+			Properties properties = new Properties();
+			try 
+			{
+				properties.load( inputStream );
+				String driver = properties.getProperty("driver");
+				String url = properties.getProperty("url");
+				String user = properties.getProperty("user");
+				String password = properties.getProperty("password");
+				Class.forName(driver);
+				conn = DriverManager.getConnection( url, user, password );
+			} 
+			catch (IOException e) 
+			{
+				System.out.println(e.toString());
+				//e.printStackTrace();
+			} 
+			catch (ClassNotFoundException e) 
+			{
+				System.out.println(e.toString());
+				//e.printStackTrace();
+			}
+			catch (SQLException e) 
+			{
+				System.out.println(e.toString());
+				//e.printStackTrace();
+			}
 		}
 		return conn;
 	}
 	/**
 	 * Metodo que cierra la conexión a la base de datos
 	 * */
-	public static void closeConnection( Connection toBeClosed ) 
+	public static void closeConnection(Connection toBeClosed ) 
 	{
 		if(toBeClosed == null)
 			return;
