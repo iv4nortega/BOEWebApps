@@ -54,6 +54,7 @@ $(document).ready(function() {
   	/*INICIALIZA DATATABLES*/
   	var table = $('#opportunitiesTable').DataTable({
 	  		ajax: "OpportunityController?action=list_opportunities",
+	  		error: function(e) { alert("Error"); console.debug(e);},
 	        columns: [
 	            {
 	                className:      'details-control',
