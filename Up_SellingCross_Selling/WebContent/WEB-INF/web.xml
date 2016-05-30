@@ -8,9 +8,17 @@
 	  <servlet-name>OpportunityController</servlet-name>
 	  <servlet-class>com.finance.controllers.OpportunityController</servlet-class>
   </servlet>
+  <servlet>
+	  <servlet-name>CommentsController</servlet-name>
+	  <servlet-class>com.finance.controllers.CommentsController</servlet-class>
+  </servlet>
   <servlet-mapping>
 	  <servlet-name>OpportunityController</servlet-name>
 	  <url-pattern>/OpportunityController.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+	  <servlet-name>CommentsController</servlet-name>
+	  <url-pattern>/CommentsController.do</url-pattern>
   </servlet-mapping>
 <error-page>
         <error-code>404</error-code>

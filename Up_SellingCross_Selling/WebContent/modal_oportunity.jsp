@@ -21,8 +21,6 @@
 				<div class="large-8 columns">
 			        <label>Servicio:</label>
 			        <select id="new_record_service" name="new_record_service">
-			        	<option value="1">Servicio 1</option>
-			          	<option value="2">Servicio 2</option>
 			        </select>
 			  	</div>
 			</div>
@@ -31,19 +29,19 @@
                    <!--Tipo de venta-->
                    <label>Tipo de venta:</label>
                    <select id="new_record_type_sale" name="new_record_type_sale">
-                       <option value="1">UP_SELLING</option>
-                       <option value="2">CROSS_SELLING</option>
+                       <option value="UP_SELLING">UP_SELLING</option>
+                       <option value="CROSS_SELLING">CROSS_SELLING</option>
                    </select>
                </div>
                <div class="large-4 columns">
-	               <label>Costo:</label>
+	               <label>Costo (USD): </label>
 	               <div class="row collapse prefix-radius">
 			        <div class="small-1 columns">
 			          <span class="prefix">$</span>
 			        </div>
 			        <div class="small-11 columns">
 			          <!--Costo-->
-	                   <input type="text" autocomplete="off" id="new_record_amount" name="new_record_amount"  >
+	                   <input type="text" autocomplete="off" maxlength="12" id="new_record_amount" name="new_record_amount"  >
 			        </div>
 			      </div>
                </div>
@@ -81,7 +79,7 @@
                <div class="large-12 columns">
 		           <!--Descripción-->
 		           <label>Descripción:</label>
-		           <textarea id="new_record_description" name="new_record_description" ></textarea>
+		           <textarea class="textarea-100" id="new_record_description" name="new_record_description" ></textarea>
 		           <button type="submit" id="edit_save_button"><i class="fa fa-save"></i> Guardar</button>
                </div>
            </div>

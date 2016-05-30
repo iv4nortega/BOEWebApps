@@ -35,6 +35,8 @@ public class OpportunityController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String forward = "";
 		String action = request.getParameter( "action" );
+	    PrintWriter out = response.getWriter();
+	    JSONSerializer json = new JSONSerializer();
 		try{
 
 			if( action.equalsIgnoreCase( "delete" ) ) {
@@ -51,8 +53,6 @@ public class OpportunityController extends HttpServlet {
 				request.setAttribute("opportunities", opportunity);
 				
 				response.setContentType("application/json");
-			    PrintWriter out = response.getWriter();
-			    JSONSerializer json = new JSONSerializer();
 			    try {
 			        out.println(json.serialize(opportunity));
 			    } finally {
@@ -66,8 +66,6 @@ public class OpportunityController extends HttpServlet {
 			else if(action.equalsIgnoreCase("list_opportunities")){
 				forward = LIST_OPPORTUNITIES;
 				response.setContentType("application/json");
-			    PrintWriter out = response.getWriter();
-			    JSONSerializer json = new JSONSerializer();
 			    try {
 			    	String data = json.serialize(det.getAllOpportunity());
 			        out.println("{ \"data\": "+ data + "}");
@@ -77,8 +75,6 @@ public class OpportunityController extends HttpServlet {
 			}
 			else if(action.equalsIgnoreCase("list_customers")){
 				response.setContentType("application/json");
-			    PrintWriter out = response.getWriter();
-			    JSONSerializer json = new JSONSerializer();
 			    try {
 			    	String data = json.serialize(det.getAllCustomers());
 			        out.println(data);
@@ -88,8 +84,6 @@ public class OpportunityController extends HttpServlet {
 			}
 			else if(action.equalsIgnoreCase("list_services")){
 				response.setContentType("application/json");
-			    PrintWriter out = response.getWriter();
-			    JSONSerializer json = new JSONSerializer();
 			    try {
 			    	String data = json.serialize(det.getAllServices());
 			        out.println(data);
@@ -97,42 +91,66 @@ public class OpportunityController extends HttpServlet {
 			        out.close();
 			    }
 			}
+			else if(action.equalsIgnoreCase("list_notes"))
+			{
+				response.setContentType("application/json");
+			    try {
+			    	int idItem =  Integer.parseInt(request.getParameter("IDUpCrossSelling"));
+			    	String data = json.serialize(det.getComments(idItem));
+			        out.println(data);
+			    } finally {
+			        out.close();
+			    }
+			}
 		}
 		catch (Exception ex) {
-			PrintWriter out = response.getWriter();
-			out.println(ex);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+			response.flushBuffer();
 		}
 	}
+    /*
+     * Guarda o actualiza una oportunidad
+     * */
     @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		OpportunityModel opportunity = new OpportunityModel();
-		opportunity.setIDCustomer(Integer.parseInt(request.getParameter("new_record_customer")));
-		opportunity.setIDService(Integer.parseInt(request.getParameter("new_record_service")));
-		opportunity.setCost(request.getParameter( "new_record_amount" ));
-		opportunity.setProbability(Float.parseFloat(request.getParameter( "new_record_probability" )));
-		opportunity.setDescription(request.getParameter( "new_record_description" ));
-		String timeTentative = request.getParameter( "new_record_date" ).replace("-", "");
-		opportunity.setIDTimeTentative(Integer.parseInt(timeTentative));
-		/*Fecha Inicial*/
-		String recordDateStart = request.getParameter( "new_record_date_start" ).replace("-", "");
-		if(recordDateStart != null && !recordDateStart.isEmpty()){
-			opportunity.setIDTimeStart(Integer.parseInt(recordDateStart));
-		}
-		/*Fecha final*/
-		String recordDateEnd = request.getParameter( "new_record_date_end" ).replace("-", "");
-		if(recordDateEnd != null && !recordDateEnd.isEmpty()){
-			opportunity.setIDTimeEnd(Integer.parseInt(recordDateEnd));
-		}
-		String opportunityId = request.getParameter("new_record_id");
-		
-		if( opportunityId == null || opportunityId.isEmpty()) 
-			det.addOpportunity(opportunity);
-		else {
-			opportunity.setIDUpCrossSelling( Integer.parseInt(opportunityId) );
-			det.updateOpportunity(opportunity);
-		}
-		request.setAttribute("opportunities", det.getAllOpportunity());
-		response.sendRedirect(LIST_OPPORTUNITIES);
+    	try
+    	{
+
+    		OpportunityModel opportunity = new OpportunityModel();
+    		opportunity.setIDCustomer(Integer.parseInt(request.getParameter("new_record_customer")));
+    		opportunity.setIDService(Integer.parseInt(request.getParameter("new_record_service")));
+    		opportunity.setCost(request.getParameter( "new_record_amount" ));
+    		opportunity.setProbability(Float.parseFloat(request.getParameter( "new_record_probability" )));
+    		opportunity.setDescription(request.getParameter( "new_record_description" ));
+    		opportunity.setType(request.getParameter( "new_record_type_sale" ));
+    		String timeTentative = request.getParameter( "new_record_date" ).replace("-", "");
+    		opportunity.setIDTimeTentative(Integer.parseInt(timeTentative));
+    		/*Fecha Inicial*/
+    		String recordDateStart = request.getParameter( "new_record_date_start" ).replace("-", "");
+    		if(recordDateStart != null && !recordDateStart.isEmpty()){
+    			opportunity.setIDTimeStart(Integer.parseInt(recordDateStart));
+    		}
+    		/*Fecha final*/
+    		String recordDateEnd = request.getParameter( "new_record_date_end" ).replace("-", "");
+    		if(recordDateEnd != null && !recordDateEnd.isEmpty()){
+    			opportunity.setIDTimeEnd(Integer.parseInt(recordDateEnd));
+    		}
+    		String opportunityId = request.getParameter("new_record_id");
+    		
+    		if( opportunityId == null || opportunityId.isEmpty()) 
+    			det.addOpportunity(opportunity);
+    		else {
+    			opportunity.setIDUpCrossSelling( Integer.parseInt(opportunityId) );
+    			det.updateOpportunity(opportunity);
+    		}
+    		request.setAttribute("opportunities", det.getAllOpportunity());
+    		response.sendRedirect(LIST_OPPORTUNITIES);
+    	}
+    	catch (Exception ex)
+    	{
+    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+			response.flushBuffer();
+    	}
 	}
 }

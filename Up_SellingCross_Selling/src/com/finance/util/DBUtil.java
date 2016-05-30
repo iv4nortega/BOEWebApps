@@ -43,18 +43,18 @@ public class DBUtil
 			} 
 			catch (IOException e) 
 			{
-				System.out.println(e.toString());
-				//e.printStackTrace();
+				//System.out.println(e.toString());
+				e.printStackTrace();
 			} 
 			catch (ClassNotFoundException e) 
 			{
-				System.out.println(e.toString());
-				//e.printStackTrace();
+				//System.out.println(e.toString());
+				e.printStackTrace();
 			}
 			catch (SQLException e) 
 			{
-				System.out.println(e.toString());
-				//e.printStackTrace();
+				//System.out.println(e.toString());
+				e.printStackTrace();
 			}
 		}
 		return conn;

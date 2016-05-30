@@ -20,6 +20,7 @@ public class OpportunityModel
 	private String description;
 	private String customerName;
 	private String serviceName;
+	private String type;
 	
 	/*ID DE OPORTUNITY*/
 	public int getIDUpCrossSelling() {
@@ -118,6 +119,13 @@ public class OpportunityModel
 	}
 	public void setServiceName(String servicename) {
 		this.serviceName = servicename;
+	}
+	/*Nombre del tipo de venta*/
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 //	@Override
 //	public String toString() {

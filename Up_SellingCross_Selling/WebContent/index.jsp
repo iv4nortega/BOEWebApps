@@ -10,8 +10,9 @@
 </head>
 <body>
 <div class="loader"></div>
+	<b id="WiWUserName" style="float:right"></b>
     <button id="newRecord"><i class="fa fa-plus"></i> Nuevo registro</button>
-	<table id="opportunitiesTable" class="display" cellspacing="0" width="100%">
+	<table id="opportunitiesTable" class="display" cellspacing="0" width="100%" role="grid">
         <thead>
             <tr>
                 <th></th>
@@ -45,5 +46,9 @@
     </div>
 	<jsp:include page="modal_oportunity.jsp"/>
 </body>
-<jsp:include page="WEB-INF/views/commons/footer.jsp"/>
+<script>
+$(function() {
+	UpCrossSelling.App.Init();
+});
+</script>
 </html> 
