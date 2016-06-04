@@ -1,2 +1,0 @@
-# UpCrossSelling
-Proyecto con servlets
