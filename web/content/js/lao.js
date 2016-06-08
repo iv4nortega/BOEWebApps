@@ -7,8 +7,6 @@ var lao = window.lao || {};
 
 // Módulo de inicialización y funciones genéricas
 lao.app = (function ($, window, document, undefined) {
-	/*OBTIENE EL LISTADO DE CLIENTES MEDIANTE AJAX*/
-	GetCustomerList();
 	//Variables
 	var ajaxTable, uuids = null,
 	userunregistered = 'Usuario no registrado',
@@ -17,6 +15,8 @@ lao.app = (function ($, window, document, undefined) {
     //Inicialización de módulo
     var InitializeApplication = function () 
     {
+    	/*OBTIENE EL LISTADO DE CLIENTES MEDIANTE AJAX*/
+    	GetCustomerList();
     	var bridgeframe = top.document.getElementsByName('servletBridgeIframe');
     	$(bridgeframe).contents().find('.newWindowIcon').hide();
     	$(document).ajaxStart(function() {
