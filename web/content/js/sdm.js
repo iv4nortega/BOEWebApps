@@ -17,8 +17,8 @@ SDM.App = (function ($, window, document, undefined) {
 			$(".loader").hide();
 		});
 		/*Get SDM list for verify profile */
-		
 		BOEWebApp.OperationGetIdSDM();
+		
 		$('#new_value').on('click', function(){
     		$('#modal_add_value').css('display', 'block');
     	});

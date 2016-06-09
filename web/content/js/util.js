@@ -33,8 +33,12 @@ BOEWebApp = (function ($, window, document, undefined) {
     		   }
  	       },
          error: function(error){
+        	 if(error.responseText.match('conexión')){
+        		 $.notify("Hubo un problema con la conexión a la base de datos.", "error");
+    		 }
+        	 else
          		$.notify("No se pudieron obtener los SDM.", "error");
-         	}
+         }
     	});
     };
 	return {

@@ -17,29 +17,10 @@ public class OperationImplementation implements OperationData {
 	public OperationImplementation(){
 		conn = DBUtil.getConnection();
 	}
-	/*
-	 * Verifica si la conexión esta cerrada para volver a crearla
-	 */
-	private Statement VerifyConnection(Connection connection) throws SQLException {
-		Statement statement = connection.createStatement();
-		try{
-			if(connection.isClosed()){
-				connection = null;
-				connection = DBUtil.getConnection();
-			}
-			else{
-				return statement;
-			}
-		}
-		catch (Exception ex){
-			ex.printStackTrace();
-		}
-		return statement;
-	}
 	@Override
 	public List<OperationModel> getAllOperations(int idSDM) throws SQLException{
 		List<OperationModel> operations = new ArrayList<OperationModel>();
-		Statement statement = VerifyConnection(conn);
+		Statement statement = DBUtil.VerifyConnection(conn);
 		ResultSet resultSet = statement.executeQuery( "SELECT OperationTops.*, SDMs.SDMShortName, customer.CName "+
 			"FROM FinanceDB_Dev.dbo.F_Operation_TOP  as OperationTops "+
 			"INNER JOIN D_SDMs as SDMs "+

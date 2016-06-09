@@ -14,8 +14,7 @@
 <!--Cliente-->
 	<div class="large-4 columns">
 		<label>Cliente:</label>
-		<!-- <input id="selectcustomer" name="selectcustomer" autocomplete="on"> -->
-	    <select class="full-width" id="selectcustomer" name="selectcustomer"></select>
+		<input id="autocomplete_customer" name="autocomplete_customer" autocomplete="on">
 	</div>
 	<div class="large-5 columns">
 		<!-- ESPACIO VACIO ENTRE COLUMNA CLIENTE Y PERIODO -->
@@ -61,12 +60,37 @@
  <div class="modalapp" id="modal_add_value">
       <div class="modalapp-content">
            <span class="closemodal">x</span>
-           <h3>Registro de nuevo valor</h3>
-				<label>Valor:</label>
-				<input type="text" maxlength="8" />
-				<label>Descripci�n:</label>
-				<textarea maxlength="250" class="textarea-50"></textarea>
-           <button id="">Guardar</button>
+           <form id="form_operation_top" name="form_operation_top" class="form-default">
+	           <input type="text" style="display:none" id="operationId" name="operationId" />
+	           <input type="text" style="display:none" id="sdmId" name="sdmId"/>
+	           	<div class="row"><h3>Registro de nuevo valor</h3></div>
+	           	<div class="row">
+		           	<div class="large-6 columns">
+						<label>Cliente:</label>
+					    <select class="full-width" id="selectcustomer" name="selectcustomer"></select>
+					</div>
+					<div class="large-6 columns">
+						<label>Nombre del proceso:</label>
+						<input type="text" maxlength="100" id="processName" name="processName" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-4 columns">
+						<label>Valor:</label>
+						<input type="text" maxlength="8" id="quantity" name="quantity" />
+					</div>
+					<div class="large-8 columns">
+					<!-- Empty space -->
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-12 columns">
+						<label>Descripción:</label>
+						<textarea maxlength="250" class="textarea-50"  id="description" name="description"></textarea>
+					</div>
+				</div>
+				<div class="row"><div class="large-12 columns"><button id="save_operation_top">Guardar</button></div></div>
+			</form>
       </div>
     </div>
 <script>

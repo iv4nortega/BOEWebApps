@@ -21,32 +21,13 @@ public class LAOImplementation implements LAOData {
 		conn = DBUtil.getConnection();
 	}
 	/*
-	 * Verifica si la conexión esta cerrada para volver a crearla
-	 */
-	private Statement VerifyConnection(Connection connection) throws SQLException {
-		Statement statement = connection.createStatement();
-		try{
-			if(connection.isClosed()){
-				connection = null;
-				connection = DBUtil.getConnection();
-			}
-			else{
-				return statement;
-			}
-		}
-		catch (Exception ex){
-			ex.printStackTrace();
-		}
-		return statement;
-	}
-	/*
 	 * Obtiene el listado de oportunidades para mostrarse en el listado
 	 * */
 	@Override
 	public List<LAOModel> getLAORecords(String userLogin) {
 		List<LAOModel> laomodel = new ArrayList<LAOModel>();
 		try {
-			Statement statement = VerifyConnection(conn);
+			Statement statement = DBUtil.VerifyConnection(conn);
 			ResultSet resultSet = statement.executeQuery("EXEC dbo.sp_getLAO "
 					+ "@BOEUser = '"+ userLogin + "', @BOEProfile = null;");
 //			ResultSet resultSet = statement.executeQuery("SELECT lao.*, "+
@@ -194,7 +175,7 @@ public class LAOImplementation implements LAOData {
 	}
 	@Override
 	public UserBOEModel getUserProfile(String userLogin) throws SQLException{
-		Statement statement = VerifyConnection(conn);
+		Statement statement = DBUtil.VerifyConnection(conn);
 		ResultSet resultSet = statement.executeQuery("SELECT * FROM D_SDMs WHERE SDMBOEFullName='"+ userLogin + "'");
 		UserBOEModel user = new UserBOEModel();
 		while( resultSet.next() ) {

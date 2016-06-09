@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.boe.apps.models.*;
 
-
-/**
- * @author Ivan Hernández Ortega
- */
+/* 
+ * @author : Iván Hernández Ortega
+ * @create date : 06 de Mayo 2016
+*/
 public interface LAOData 
 {
 	public void addLAO(LAOModel lao) throws SQLException;

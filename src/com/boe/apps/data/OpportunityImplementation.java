@@ -24,31 +24,12 @@ public class OpportunityImplementation implements OpportunityData {
 		conn = DBUtil.getConnection();
 	}
 	/*
-	 * Verifica si la conexión esta cerrada para volver a crearla
-	 */
-	private Statement VerifyConnection(Connection connection) throws SQLException {
-		Statement statement = connection.createStatement();
-		try{
-			if(connection.isClosed()){
-				connection = null;
-				connection = DBUtil.getConnection();
-			}
-			else{
-				return statement;
-			}
-		}
-		catch (Exception ex){
-			ex.printStackTrace();
-		}
-		return statement;
-	}
-	/*
 	 * Obtiene el listado de oportunidades para mostrarse en el listado
 	 * */
 	@Override
 	public List<OpportunityModel> getAllOpportunity() throws SQLException {
 		List<OpportunityModel> opportunities = new ArrayList<OpportunityModel>();
-		Statement statement = VerifyConnection(conn);
+		Statement statement = DBUtil.VerifyConnection(conn);
 		ResultSet resultSet = statement.executeQuery( "SELECT Opp.*,"+ 
 			  "Customers.CName as CustomerName,"+ 
 			  "Services.Name as ServiceName,"+
@@ -203,7 +184,7 @@ public class OpportunityImplementation implements OpportunityData {
 	@Override
 	public List<CustomerModel> getAllCustomers() throws SQLException {
 		List<CustomerModel> customers = new ArrayList<CustomerModel>();
-		Statement statement = VerifyConnection(conn);
+		Statement statement = DBUtil.VerifyConnection(conn);
 		ResultSet resultSet = statement.executeQuery( "SELECT * FROM D_Customer ORDER BY CName ASC" );
 		while( resultSet.next() ) {
 			CustomerModel customer = new CustomerModel();
@@ -218,7 +199,7 @@ public class OpportunityImplementation implements OpportunityData {
 	@Override
 	public List<ServiceModel> getAllServices() throws SQLException {
 		List<ServiceModel> services = new ArrayList<ServiceModel>();
-		Statement statement = VerifyConnection(conn);
+		Statement statement = DBUtil.VerifyConnection(conn);
 		ResultSet resultSet = statement.executeQuery( "SELECT * FROM Cat_Services" );
 		while( resultSet.next() ) {
 			ServiceModel service = new ServiceModel();

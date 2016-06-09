@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -74,5 +75,21 @@ public class DBUtil
 		{
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * Metodo que verifica la conexión a la base de datos
+	 * @throws SQLException 
+	 * */
+	public static Statement VerifyConnection(Connection connection) throws SQLException
+	{
+		if(connection == null){
+			connection = DBUtil.getConnection();
+		}
+		if(connection.isClosed()){
+			connection = null;
+			connection = DBUtil.getConnection();
+		}
+		Statement statement = connection.createStatement();
+		return statement;
 	}
 }
