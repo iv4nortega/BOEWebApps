@@ -7,8 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import com.boe.apps.data.LAOData;
-import com.boe.apps.data.LAOImplementation;
+import com.boe.apps.data.SDMImplementation;
 
 import flexjson.JSONSerializer;
 
@@ -17,11 +16,11 @@ public class SDMController extends HttpServlet{
 	/**
 	 * Controller que obtiene informacion de los SDM
 	 */
-	private LAOData det;
+	private SDMImplementation det;
 	private static final long serialVersionUID = 1L;
 
 	public SDMController(){
-		det = new LAOImplementation();
+		det = new SDMImplementation();
 	}
 	
 	@Override 
