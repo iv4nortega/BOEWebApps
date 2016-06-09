@@ -18,7 +18,7 @@ import flexjson.JSONSerializer;
 
 /**
  * @author Iván Hernández Ortega
- * Controller principal de acciones 
+ * Controller principal de acciones para comentarios Up Cross Selling, LAO y Operations
  */
 @WebServlet("/CommentController")
 public class CommentController extends HttpServlet  {

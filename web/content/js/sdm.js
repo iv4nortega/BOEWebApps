@@ -6,14 +6,19 @@
 var SDM = window.SDM || {};
 /*Initialize functions for metrics for user sdm*/
 SDM.App = (function ($, window, document, undefined) {
-	var Init = function(){
+	
+	var idSDMLogged = null;
+	
+	var Init = function()
+	{
 		$(document).ajaxStart(function() {
 		    $(".loader").show();
 		}).ajaxStop(function() {
 			$(".loader").hide();
 		});
-		/*Call function for draw customers in select*/
-		GetCustomerList();
+		/*Get SDM list for verify profile */
+		
+		BOEWebApp.OperationGetIdSDM();
 		$('#new_value').on('click', function(){
     		$('#modal_add_value').css('display', 'block');
     	});
@@ -22,7 +27,72 @@ SDM.App = (function ($, window, document, undefined) {
        		$('#modal_add_value').css('display', 'none');
                window.location.href = "/BOEWebApps/SDM";
        	});
-		$('#metrics_sdm').DataTable({
+		
+	};
+	 /*Get list customer for show in select 
+	  * of metrics view*/
+    var GetCustomerList = function (userId)
+    {
+    	DrawDataTable(userId);
+//    	$( "#selectcustomer" ).autocomplete({
+//    	      source: function( request, response ) {
+//    	        $.ajax({ type: 'GET',   
+//    	    	     url: '../CustomerController.do?action=list_customers',
+//  	     	         dataType: "json",
+//  	     	         data: { customerName: request.term },
+//    	     	     success : function(data){
+//    	     	    	 response( $.map( data, function( item ) {
+//    	     	    		if ( item.customerName && ( !request.term) ) {
+//    	     	    		 return {
+//    	     	    			label:item.customerName,
+//    	     	    		 	value: item.customerId
+//    	     	    		 }
+//    	     	    		}
+//    	    	    	   }));
+//    	    	       },
+//    	            error: function(error){
+//    	            	$.notify('No se pudo obtener el listado de clientes.', 'error');
+//    	            }
+//    	    	});
+//    	      },
+//    	      minLength: 2,
+//    	      select: function( event, ui ) {
+//    	        console.log( ui.item ?
+//    	          "Selected: " + ui.item.label :
+//    	          "Nothing selected, input was " + this.value);
+//    	      },
+//    	      open: function() {
+//    	        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+//    	      },
+//    	      close: function() {
+//    	        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+//    	      }
+//    	    });
+    	
+    	
+    	/*          */
+    	$.ajax({ type: 'GET',   
+    	       url: '../CustomerController.do?action=list_customers',   
+    	       success : function(data){
+    	    	   var listcustomers = $('#selectcustomer');
+    	    	   listcustomers.find('option').remove().end();
+    	            $.each(data, function (index, item) {
+    	            	listcustomers.append(
+    	                $('<option>', {
+    	                    value: item.customerId,
+    	                    text: item.customerName
+    	                }, '<option/>'));
+    	            });
+    	            listcustomers.val(listcustomers);
+    	       },
+            error: function(error){
+            	$.notify('No se pudo obtener el listado de clientes.', 'error');
+            }
+    	});
+    };
+    function DrawDataTable (userId)
+    {
+    	$('#metrics_sdm').DataTable({
     		select: true, 
     		ordering: true,
     	    language : {
@@ -49,99 +119,16 @@ SDM.App = (function ($, window, document, undefined) {
     	        sortDescending : ' Descendente'
     	      }
     	    },
-    		//ajax: "../LAOController?action=list_lao&UserLogin="+ GetUserSessionBOE(),
-//    	    columns: [
-//    			{
-//	                className:      'details-control',
-//	                orderable:      false,
-//	                data:           null,
-//	                defaultContent: '',
-//	                width: "3%"
-//	            },
-//    	        { data: "IDLAO", width: "5%", visible: false},
-//    	        { data: "SDMShortName", width: "17%" },
-//    	        { data: "customerName",width: "10%" },
-//    	        { data: "plannedDate", width: "10%"},
-//    	        { data: "realDate", width: "10%" },
-//    	        { data: "closeDate", width: "10%" },
-//    	        { data: "subject",width: "20%" },
-//    	        { data: "status",width: "10%" },
-//    	        {
-//	                className:      '',
-//	                width: "8%",
-//	                orderable:      false,
-//	                data:           'IDLAO',
-//	                render: function (data, type, row, meta){
-//	                	var actions = "<a href='#' onclick='lao.app.UpdateLAO(" +row.IDLAO+ ")'>"+
-//	                		"<i class='fa fa-edit'></i> Editar</a>";
-//	                	// | <a href='#' onclick='lao.app.DeleteLAO(" +row.IDLAO + 
-//	                	//	")'><i class='fa fa-trash'></i> Eliminar</a>";
-//	                	return actions;
-//	                },
-//	            },
-//    	    ],
+    		ajax: "../OperationController?action=list_operation_top&BOEUserName="+ userId,
+    	    columns: [
+    	        { data: 'description', width: '80%'},
+    	        { data: 'quantity', width: '20%'}
+    	    ],
     	});
-	};
-	 /*Get list customer for show in select 
-	  * of metrics view*/
-    function GetCustomerList()
-    {
-    	$( "#selectcustomer" ).autocomplete({
-    	      source: function( request, response ) {
-    	        $.ajax({ type: 'GET',   
-    	    	     url: '../CustomerController.do?action=list_customers',
-  	     	         dataType: "json",
-  	     	         data: { customerName: request.term },
-    	     	     success : function(data){
-    	     	    	 response( $.map( data, function( item ) {
-    	     	    		 var obj = new Object();
-    	     	    		 
-    	     	    		 obj.label = item.customerName;
-    	     	    		 obj.value = item.customerId;
-    	     	    		 
-    	     	    		 return obj;
-    	    	    	   }));
-    	    	       },
-    	            error: function(error){
-    	            	$.notify('No se pudo obtener el listado de clientes.', 'error');
-    	            }
-    	    	});
-    	      },
-    	      minLength: 2,
-    	      select: function( event, ui ) {
-    	        console.log( ui.item ?
-    	          "Selected: " + ui.item.label :
-    	          "Nothing selected, input was " + this.value);
-    	      },
-    	      open: function() {
-    	        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-    	      },
-    	      close: function() {
-    	        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-    	      }
-    	    });
-    	///****/*/*/*/*/*/*/*/
-//    	$.ajax({ type: 'GET',   
-//    	       url: '../CustomerController.do?action=list_customers',   
-//    	       success : function(data){
-//    	    	   var listcustomers = $('#selectcustomer');
-//    	    	   listcustomers.find('option').remove().end();
-//    	            $.each(data, function (index, item) {
-//    	            	listcustomers.append(
-//    	                $('<option>', {
-//    	                    value: item.customerId,
-//    	                    text: item.customerName
-//    	                }, '<option/>'));
-//    	            });
-//    	            listcustomers.val(listcustomers);
-//    	       },
-//            error: function(error){
-//            	$.notify('No se pudo obtener el listado de clientes.', 'error');
-//            }
-//    	});
-    };
+    }
     /*return of functions globals - call in html*/
 	return {
-		Init: Init
+		Init: Init, 
+		GetCustomerList: GetCustomerList
 	};	
 }(jQuery, window, document, undefined));

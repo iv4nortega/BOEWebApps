@@ -19,4 +19,5 @@
 <script src="${pageContext.request.contextPath}/content/js/jquery.number.min.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/content/js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/content/js/notify.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/content/js/util.js" type="text/javascript"></script>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">

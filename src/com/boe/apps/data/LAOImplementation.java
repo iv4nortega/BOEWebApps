@@ -193,25 +193,6 @@ public class LAOImplementation implements LAOData {
 		}
 	}
 	@Override
-	public List<CustomerModel> getAllCustomers() {
-		List<CustomerModel> customers = new ArrayList<CustomerModel>();
-		try {
-			Statement statement = conn.createStatement();
-			ResultSet resultSet = statement.executeQuery( "SELECT * FROM D_Customer" );
-			while( resultSet.next() ) {
-				CustomerModel customer = new CustomerModel();
-				customer.setCustomerId( resultSet.getInt("IDCustomer") );
-				customer.setCustomerName( resultSet.getString("CName" ));
-				customers.add(customer);
-			}
-			resultSet.close();
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return customers;
-	}
-	@Override
 	public UserBOEModel getUserProfile(String userLogin) throws SQLException{
 		Statement statement = VerifyConnection(conn);
 		ResultSet resultSet = statement.executeQuery("SELECT * FROM D_SDMs WHERE SDMBOEFullName='"+ userLogin + "'");

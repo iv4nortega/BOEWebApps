@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+	pageEncoding="UTF-8"%>
 <!DOCTYPE>
 <html>
 <head>
 	<jsp:include page="../commons/header.jsp"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<script src="${pageContext.request.contextPath}/content/js/sdm.js" type="text/javascript"></script>
-	<title>Métricas por usuario SDM </title>
+	<title>MÃ©tricas por usuario SDM </title>
 </head>
 <body>
 <div class="loader"></div>
@@ -14,8 +14,8 @@
 <!--Cliente-->
 	<div class="large-4 columns">
 		<label>Cliente:</label>
-		<input id="selectcustomer" name="selectcustomer" >
-	    <!-- <select class="full-width" id="selectcustomer" name="selectcustomer"></select> -->
+		<!-- <input id="selectcustomer" name="selectcustomer" autocomplete="on"> -->
+	    <select class="full-width" id="selectcustomer" name="selectcustomer"></select>
 	</div>
 	<div class="large-5 columns">
 		<!-- ESPACIO VACIO ENTRE COLUMNA CLIENTE Y PERIODO -->
@@ -31,7 +31,7 @@
 <div class="row">
 <!--Cliente-->
 	<div class="large-6 columns">
-		<label>Métrica:</label>
+		<label>MÃ©trica:</label>
 		<select class="full-width" id="selectstatus" name="selectstatus">
 			<option value="1">Incident</option>
 			<option value="2">Request</option>
@@ -47,13 +47,13 @@
 <table id="metrics_sdm" style="width:100%;" class="display">
     <thead>
         <tr>
-            <th>Descripción</th>
+            <th>DescripciÃ³n</th>
             <th>Valor</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <th>Descripción</th>
+            <th>DescripciÃ³n</th>
             <th>Valor</th>
         </tr>
     </tfoot>
@@ -64,7 +64,7 @@
            <h3>Registro de nuevo valor</h3>
 				<label>Valor:</label>
 				<input type="text" maxlength="8" />
-				<label>Descripción:</label>
+				<label>Descripciï¿½n:</label>
 				<textarea maxlength="250" class="textarea-50"></textarea>
            <button id="">Guardar</button>
       </div>
