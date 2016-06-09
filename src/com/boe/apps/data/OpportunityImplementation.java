@@ -204,7 +204,7 @@ public class OpportunityImplementation implements OpportunityData {
 	public List<CustomerModel> getAllCustomers() throws SQLException {
 		List<CustomerModel> customers = new ArrayList<CustomerModel>();
 		Statement statement = VerifyConnection(conn);
-		ResultSet resultSet = statement.executeQuery( "SELECT * FROM D_Customer" );
+		ResultSet resultSet = statement.executeQuery( "SELECT * FROM D_Customer ORDER BY CName ASC" );
 		while( resultSet.next() ) {
 			CustomerModel customer = new CustomerModel();
 			customer.setCustomerId( resultSet.getInt("IDCustomer") );

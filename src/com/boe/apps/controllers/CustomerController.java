@@ -33,12 +33,9 @@ public class CustomerController extends HttpServlet{
     	    JSONSerializer json = new JSONSerializer();
     	    if(action.equalsIgnoreCase("list_customers")){
     			response.setContentType("application/json");
-    		    try {
-    		    	String data = json.serialize(det.getAllCustomers());
-    		        out.println(data);
-    		    } finally {
-    		        out.close();
-    		    }
+    			String data = json.serialize(det.getAllCustomers());
+		        out.println(data);
+		        out.close();
     		}
     	}
     	catch(Exception ex) {

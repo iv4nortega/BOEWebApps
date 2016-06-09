@@ -17,6 +17,5 @@ public interface LAOData
 	public List<LAOModel> getLAORecords(String userLogin);
 	public List<NotesModel> getLAONotes(int laoId);
 	public LAOModel getLAOById(int laoId) throws SQLException;
-	public List<CustomerModel> getAllCustomers();
 	public UserBOEModel getUserProfile(String userLogin) throws SQLException;
 }

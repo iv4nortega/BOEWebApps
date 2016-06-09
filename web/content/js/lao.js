@@ -65,7 +65,7 @@ lao.app = (function ($, window, document, undefined) {
 		  /*hide notification*/
 		  $(this).trigger('notify-hide');
 		});
-    	var userBOE = GetUserSessionBOE();
+    	var userBOE = BOEWebApp.GetBOEUserName();
     	$('#UserLogin').val(userBOE);
     	if(userBOE == userunregistered){
     		$('#newRecord').hide();
@@ -124,7 +124,7 @@ lao.app = (function ($, window, document, undefined) {
     	        sortDescending : ' Descendente'
     	      }
     	    },
-    		ajax: "../LAOController?action=list_lao&UserLogin="+ GetUserSessionBOE(),
+    		ajax: "../LAOController?action=list_lao&UserLogin="+ BOEWebApp.GetBOEUserName(),
     	    columns: [
     			{
 	                className:      'details-control',
@@ -245,7 +245,7 @@ lao.app = (function ($, window, document, undefined) {
 			}
 		});
     	/*Obtiene un listado de SDMs*/
-    	setTimeout(GetSDMS, 500);
+    	setTimeout(BOEWebApp.GetSDMS, 500);
     };
     var DeleteComment = function(id_comment, id_lao )
 	{
@@ -265,7 +265,7 @@ lao.app = (function ($, window, document, undefined) {
 	var CreateComment = function(idselling)
 	{
 		var comment_ = $('#text_comment').val();
-		var user_boe = GetUserSessionBOE();
+		var user_boe = BOEWebApp.GetBOEUserName();
 		if(comment_ != '')
 		{
 			$.ajax({ 
@@ -343,7 +343,7 @@ lao.app = (function ($, window, document, undefined) {
     function GetSDMS()
     {
     	$.ajax({ type: "GET",   
- 	       url: "../LAOController.do?action=list_sdms&UserLogin=" + GetUserSessionBOE(),   
+ 	       url: "../LAOController.do?action=list_sdms&UserLogin=" + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
  	    	   $('#lao_idSDM').val(data.IDSDM);
  	    	   if(data.SDMProfile != 'VIP'){
@@ -419,16 +419,6 @@ lao.app = (function ($, window, document, undefined) {
 		    	$('#selectstatus').css('color', '#fff');
     		}
 		});
-	}
-	function GetUserSessionBOE(){
-		var frame = top.document.getElementsByName('servletBridgeIframe');
-		var fullusername = $(frame).contents().find('.bannerUserName').text().trim();
-		//fullusername = 'IVAN HERNANDEZ ORTEGA';
-		if(fullusername == null || fullusername == '')
-		{
-			fullusername = userunregistered;
-		}
-		return fullusername;
 	}
 	function ChangeStatusDefault(status){
 		var select_status = $('#selectstatus');

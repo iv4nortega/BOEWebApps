@@ -24,6 +24,14 @@
     <servlet-name>LAOController</servlet-name>
     <servlet-class>com.boe.apps.controllers.LAOController</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>OperationController</servlet-name>
+    <servlet-class>com.boe.apps.controllers.OperationController</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SDMController</servlet-name>
+    <servlet-class>com.boe.apps.controllers.SDMController</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>OpportunityController</servlet-name>
     <url-pattern>/OpportunityController.do</url-pattern>
@@ -43,5 +51,13 @@
   <servlet-mapping>
     <servlet-name>LAOController</servlet-name>
     <url-pattern>/LAOController.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OperationController</servlet-name>
+    <url-pattern>/OperationController.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SDMController</servlet-name>
+    <url-pattern>/SDMController.do</url-pattern>
   </servlet-mapping>
 </web-app>
