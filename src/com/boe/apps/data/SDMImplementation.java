@@ -7,7 +7,12 @@ import java.sql.Statement;
 
 import com.boe.apps.models.UserBOEModel;
 import com.boe.apps.util.DBUtil;
-
+/**
+ * @author Ivan Hernández Ortega
+ * @version 1.0.0
+ * @create 06 de Mayo 2016
+ * @update 09/06/2016
+ */
 public class SDMImplementation implements SDMData{
 
 	private Connection conn;

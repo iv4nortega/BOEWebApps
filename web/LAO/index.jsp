@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>LAO</title>
 	<jsp:include page="../commons/header.jsp"/>
 	<script src="${pageContext.request.contextPath}/content/js/lao.js" type="text/javascript"></script>
-	<fmt:setLocale value="en_US"/>
 </head>
 <body>
 <div class="loader"></div>

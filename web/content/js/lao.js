@@ -2,6 +2,7 @@
  * PUBLIC API
  * @author : Iván Hernández Ortega
  * @create date : 06 de Mayo 2016
+ * @last update : 09 de Junio 2016
 */
 var lao = window.lao || {};
 
@@ -245,7 +246,7 @@ lao.app = (function ($, window, document, undefined) {
 			}
 		});
     	/*Obtiene un listado de SDMs*/
-    	setTimeout(BOEWebApp.GetSDMS, 500);
+    	setTimeout(GetSDMS, 500);
     };
     var DeleteComment = function(id_comment, id_lao )
 	{

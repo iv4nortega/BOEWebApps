@@ -1,6 +1,5 @@
 package com.boe.apps.controllers;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -30,6 +29,10 @@ public class CommentController extends HttpServlet  {
     public CommentController() {
     	det = new OpportunityImplementation();
     }
+    /*Metodo que obtiene el listado de comentarios para mostrarlos en 
+     * Up Cross Selling
+     * LAO
+     * */
     @Override
    	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	try
@@ -56,7 +59,7 @@ public class CommentController extends HttpServlet  {
     	}
     }
     /*
-     * Metodo que guarda los comentarios para oportunidad
+     * Metodo que guarda los comentarios para Up Cross Selling y LAO
      * */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

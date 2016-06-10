@@ -45,4 +45,14 @@ public class OperationImplementation implements OperationData {
 		statement.close();
 		return operations;
 	}
+	@Override
+	public void createOperation(OperationModel operation) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void updateOperation(OperationModel operation) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
 }

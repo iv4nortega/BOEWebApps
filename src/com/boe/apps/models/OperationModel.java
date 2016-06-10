@@ -1,5 +1,10 @@
 package com.boe.apps.models;
-
+/**
+ * @author Ivan Hernández Ortega
+ * @version 1.0.0
+ * @create 09 de Junio 2016
+ * @update 09 de Junio 2016
+ */
 /*Modelo para operation Top métricas*/
 public class OperationModel {
 

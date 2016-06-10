@@ -31,7 +31,7 @@
 <!--Cliente-->
 	<div class="large-6 columns">
 		<label>Métrica:</label>
-		<select class="full-width" id="selectstatus" name="selectstatus">
+		<select class="full-width" id="selectmetric" name="selectmetric">
 			<option value="1">Incident</option>
 			<option value="2">Request</option>
 		</select>

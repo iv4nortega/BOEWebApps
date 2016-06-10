@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.boe.apps.data.*;
 import com.boe.apps.data.OperationData;
+import com.boe.apps.models.OperationModel;
 
 import flexjson.JSONSerializer;
 
@@ -23,6 +24,7 @@ public class OperationController extends HttpServlet  {
 	
 	private OperationData det;
 	private static final long serialVersionUID = 1L;
+	public static final String LIST_OPERATIONS = "/BOEWebApps/SDM";
 	
 	public OperationController(){
 		det = new OperationImplementation();
@@ -46,6 +48,36 @@ public class OperationController extends HttpServlet  {
     		}
     	}
     	catch(Exception ex) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+			response.flushBuffer();
+    	}
+	}
+
+	@Override 
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,  IOException
+	{
+		try
+    	{
+			OperationModel operation = new OperationModel();
+			operation.setIDSDM(Integer.parseInt(request.getParameter("sdmId")));
+			operation.setCustomerId(Integer.parseInt(request.getParameter("selectcustomer")));
+			operation.setProcessName(request.getParameter("processName"));
+			operation.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+			operation.setDescription(request.getParameter("description"));
+			
+    		/*Se agrega una condición 
+    		 * para realizar su accion respectiva agregar/editar*/
+    		String operationId = request.getParameter("operationId");
+    		if( operationId == null || operationId.isEmpty()) 
+    			det.createOperation(operation);
+    		else {
+    			operation.setIDOperationTop(Integer.parseInt(operationId) );
+    			det.updateOperation(operation);
+    		}
+    		request.setAttribute("operations", det.getAllOperations(operation.getIDSDM()));
+    		response.sendRedirect(LIST_OPERATIONS);
+    	}
+		catch(Exception ex) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
 			response.flushBuffer();
     	}

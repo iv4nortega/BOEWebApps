@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Up Cross Selling</title>
 	<jsp:include page="../commons/header.jsp"/>
 	<script src="${pageContext.request.contextPath}/content/js/up_cross_selling.js" type="text/javascript"></script>
-	<fmt:setLocale value="en_US"/>
 </head>
 <body>
 <div class="loader"></div>
@@ -37,15 +35,8 @@
             </tr>
         </tfoot>
     </table>
-    <div class="modalapp" id="modal_delete_record">
-      <div class="modalapp-content">
-           <span class="closemodal">x</span>
-           <h3>Eliminar registro</h3>
-           <p>Esta seguro de eliminar el registro? </p>
-           <button id="delete_confirm_record">Eliminar</button>
-      </div>
-    </div>
 	<jsp:include page="modal_oportunity.jsp"/>
+	<jsp:include page="modal_delete.jsp"/>
 </body>
 <script>
 $(function() {

@@ -1,14 +1,15 @@
 /* INITIALIZE LAO.js 
  * PUBLIC API
  * @author : Iván Hernández Ortega
- * @create date : 06 de Mayo 2016
+ * @create date : 06 de Junio 2016
+ * @last update : 09 de Junio 2016
 */
 var SDM = window.SDM || {};
 /*Initialize functions for metrics for user sdm*/
 SDM.App = (function ($, window, document, undefined) {
-	
-	var idSDMLogged = null;
-	
+	/*Variables iniciales*/
+	var idSDMLogged, table = null;
+	/*funcion inicial para sdm carga todos los elementos iniciales*/
 	var Init = function()
 	{
 		$(document).ajaxStart(function() {
@@ -16,61 +17,28 @@ SDM.App = (function ($, window, document, undefined) {
 		}).ajaxStop(function() {
 			$(".loader").hide();
 		});
-		/*Get SDM list for verify profile */
+		/*Get SDM list for verify profile 
+		 * Obtiene el listado de SDM 
+		 * En el llamado llega a util.js para obtener el ID
+		 * al terminar el llamado llega a GetCustomerList donde llega
+		 * dicho ID
+		 * */
 		BOEWebApp.OperationGetIdSDM();
-		
 		$('#new_value').on('click', function(){
     		$('#modal_add_value').css('display', 'block');
     	});
-		/*Close the modal */
+		/*Al cerrar el modal carga nuevamente la url */
     	$('.closemodal').on('click', function(){
        		$('#modal_add_value').css('display', 'none');
                window.location.href = "/BOEWebApps/SDM";
        	});
-		
 	};
 	 /*Get list customer for show in select 
-	  * of metrics view*/
+	  * of metrics view / llega el ID desde Util.js*/
     var GetCustomerList = function (userId)
     {
+    	/* Dibuja la tabla de operaciones */
     	DrawDataTable(userId);
-//    	$( "#selectcustomer" ).autocomplete({
-//    	      source: function( request, response ) {
-//    	        $.ajax({ type: 'GET',   
-//    	    	     url: '../CustomerController.do?action=list_customers',
-//  	     	         dataType: "json",
-//  	     	         data: { customerName: request.term },
-//    	     	     success : function(data){
-//    	     	    	 response( $.map( data, function( item ) {
-//    	     	    		if ( item.customerName && ( !request.term) ) {
-//    	     	    		 return {
-//    	     	    			label:item.customerName,
-//    	     	    		 	value: item.customerId
-//    	     	    		 }
-//    	     	    		}
-//    	    	    	   }));
-//    	    	       },
-//    	            error: function(error){
-//    	            	$.notify('No se pudo obtener el listado de clientes.', 'error');
-//    	            }
-//    	    	});
-//    	      },
-//    	      minLength: 2,
-//    	      select: function( event, ui ) {
-//    	        console.log( ui.item ?
-//    	          "Selected: " + ui.item.label :
-//    	          "Nothing selected, input was " + this.value);
-//    	      },
-//    	      open: function() {
-//    	        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-//    	      },
-//    	      close: function() {
-//    	        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-//    	      }
-//    	    });
-    	
-    	
-    	/*          */
     	$.ajax({ type: 'GET',   
     	       url: '../CustomerController.do?action=list_customers',   
     	       success : function(data){
@@ -92,9 +60,15 @@ SDM.App = (function ($, window, document, undefined) {
     };
     function DrawDataTable (userId)
     {
-    	$('#metrics_sdm').DataTable({
+    	/*Le asigna el valor del SDM al modal con input hide
+    	 * Necesario para realizar las consultas por SDM 
+    	 * */
+    	$('#sdmId').val(userId);
+    	/*Se Inicializa el datatable*/
+    	var table = $('#metrics_sdm').DataTable({
     		select: true, 
     		ordering: true,
+    		order: [1, 'asc'],
     	    language : {
     	      emptyTable     : 'No existen registros.',
     	      zeroRecords    : 'No se encontraron resultados.',
@@ -122,9 +96,50 @@ SDM.App = (function ($, window, document, undefined) {
     		ajax: "../OperationController?action=list_operation_top&BOEUserName="+ userId,
     	    columns: [
     	        { data: 'description', width: '80%'},
-    	        { data: 'quantity', width: '20%'}
+    	        { data: 'quantity', width: '20%'},
+    	        { data: 'processName',  visible: false},
+    	        { data: 'customerName',  visible: false}
     	    ],
     	});
+    	/*Auto Complete para la busqueda de clientes en la página principal*/
+		$( "#autocomplete_customer" ).autocomplete({
+  	      source: function( request, response ) {
+  	        $.ajax({ type: 'GET',
+  	    	     url: '../CustomerController.do?action=list_customers',
+	     	         dataType: "json",
+	     	         data: { customerName: request.term },
+  	     	     success : function(data){
+  	     	    	var array = $.map( data, function( item ) {
+ 	     	    		 return {
+    	     	    			label:item.customerName,
+    	     	    		 	value: item.customerName}
+   	    	    	   });
+  	     	    	 response($.ui.autocomplete.filter(array, request.term) );
+  	    	       },
+  	            error: function(error){
+  	            	$.notify('No se pudo obtener el listado de clientes.', 'error');
+  	            }
+  	    	});
+  	      },
+  	      select: function( event, ui ) {
+  	    	/*Al seleccionar el cliente realiza la busqueda en la tabla
+  	    	 * */
+  	    	  table.search(ui.item.label).draw();
+  	    	  /*Para no duplicar el valor en el input de busqueda se limpia al realizar la busqueda*/
+  	    	  $('#metrics_sdm_wrapper').find('input[type="search"]').val('');
+  	      },
+	  	  close: function () {
+	  		  /*Se limpia el campo despues de seleccionar el cliente*/
+  	    	  $('#autocomplete_customer').val('');
+	      }
+  	    });
+		/*Filtro para process name/metricas al seleccionar metricas*/
+		$('#selectmetric').on('change', function(){
+			/*busqueda al seleccionar las metricas*/
+			table.search(this.value).draw();
+			/*Para no duplicar el valor en el input de busqueda se limpia al realizar la busqueda*/
+			$('#metrics_sdm_wrapper').find('input[type="search"]').val('');
+		});
     }
     /*return of functions globals - call in html*/
 	return {

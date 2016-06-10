@@ -10,7 +10,7 @@ import com.boe.apps.models.*;
  */
 public interface OpportunityData 
 {
-	public void addOpportunity(OpportunityModel opportunity)throws SQLException;
+	public void createOpportunity(OpportunityModel opportunity)throws SQLException;
 	public void addComments(CommentsModel comments) throws SQLException;
 	public void deleteOpportunity(int opportunityId ) throws SQLException;
 	public void deleteComment(int commentId ) throws SQLException;
@@ -18,6 +18,4 @@ public interface OpportunityData
 	public List<CommentsModel> getComments(int laoId) throws SQLException;
 	public List<OpportunityModel> getAllOpportunity() throws SQLException;
 	public OpportunityModel getOpportunityById(int oportunityId) throws SQLException;
-	public List<CustomerModel> getAllCustomers() throws SQLException;
-	public List<ServiceModel> getAllServices() throws SQLException;
 }

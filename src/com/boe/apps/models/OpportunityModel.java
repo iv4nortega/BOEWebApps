@@ -1,8 +1,9 @@
 package com.boe.apps.models;
-
 /**
- * @author Iván Hernández Ortega
- *
+ * @author Ivan Hernández Ortega
+ * @version 1.0.0
+ * @create 06 de Mayo 2016
+ * @update 09 de Junio 2016
  */
 public class OpportunityModel 
 {

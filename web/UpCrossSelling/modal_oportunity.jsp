@@ -1,7 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" 
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <div class="modalapp" id="modal_new_record">
        <div class="modalapp-content">
        		 <div class="modalapp-header">
@@ -77,13 +73,12 @@
            </div>
            <div class="row">
                <div class="large-12 columns">
-		           <!--DescripciÃ³n-->
-		           <label>DescripciÃ³n:</label>
+		           <!--Descripción-->
+		           <label>Descripción:</label>
 		           <textarea class="textarea-100" id="new_record_description" name="new_record_description" ></textarea>
 		           <button type="submit" id="edit_save_button"><i class="fa fa-save"></i> Guardar</button>
                </div>
            </div>
        </form>
        </div>
-	</div>
-</html>
+</div>

@@ -116,7 +116,7 @@ public class OpportunityImplementation implements OpportunityData {
 		return opportunity;
 	}
 	@Override
-	public void addOpportunity(OpportunityModel opportunity) throws SQLException {
+	public void createOpportunity(OpportunityModel opportunity) throws SQLException {
 		String query = "INSERT INTO Oportunity (IDCustomer, IDService, Cost, Probability,"+ 
 				"Description, IDTimeStart, IDTimeEnd, IDTimeTentative, Type ) values (?,?,?,?,?,?,?,?,?)";
 		PreparedStatement preparedStatement = conn.prepareStatement( query );
@@ -180,35 +180,5 @@ public class OpportunityImplementation implements OpportunityData {
 			preparedStatement.setInt( 10, opportunity.getIDUpCrossSelling());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-	}
-	@Override
-	public List<CustomerModel> getAllCustomers() throws SQLException {
-		List<CustomerModel> customers = new ArrayList<CustomerModel>();
-		Statement statement = DBUtil.VerifyConnection(conn);
-		ResultSet resultSet = statement.executeQuery( "SELECT * FROM D_Customer ORDER BY CName ASC" );
-		while( resultSet.next() ) {
-			CustomerModel customer = new CustomerModel();
-			customer.setCustomerId( resultSet.getInt("IDCustomer") );
-			customer.setCustomerName( resultSet.getString("CName" ));
-			customers.add(customer);
-		}
-		resultSet.close();
-		statement.close();
-		return customers;
-	}
-	@Override
-	public List<ServiceModel> getAllServices() throws SQLException {
-		List<ServiceModel> services = new ArrayList<ServiceModel>();
-		Statement statement = DBUtil.VerifyConnection(conn);
-		ResultSet resultSet = statement.executeQuery( "SELECT * FROM Cat_Services" );
-		while( resultSet.next() ) {
-			ServiceModel service = new ServiceModel();
-			service.setServiceId( resultSet.getInt("IDService") );
-			service.setServiceName( resultSet.getString("Name" ));
-			services.add(service);
-		}
-		resultSet.close();
-		statement.close();
-		return services;
 	}
 }
