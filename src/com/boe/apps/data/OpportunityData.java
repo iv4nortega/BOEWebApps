@@ -18,4 +18,6 @@ public interface OpportunityData
 	public List<CommentsModel> getComments(int laoId) throws SQLException;
 	public List<OpportunityModel> getAllOpportunity() throws SQLException;
 	public OpportunityModel getOpportunityById(int oportunityId) throws SQLException;
+	public List<CustomerModel> getAllCustomers() throws SQLException;
+	public List<ServiceModel> getAllServices() throws SQLException;
 }

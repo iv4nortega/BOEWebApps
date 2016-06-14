@@ -13,7 +13,7 @@ BOEWebApp = (function ($, window, document, undefined) {
 	var GetBOEUserName = function(){
 		var frame = top.document.getElementsByName('servletBridgeIframe');
 		var fullusername = $(frame).contents().find('.bannerUserName').text().trim();
-		fullusername = 'LUIS MIGUEL LOPEZ MONTES DE OCA';
+		//fullusername = 'USRNAME LOCAL';
 		if(fullusername == null || fullusername == '')
 		{
 			fullusername = userunregistered;
@@ -26,7 +26,8 @@ BOEWebApp = (function ($, window, document, undefined) {
  	       url: "../SDMController.do?action=list_sdms&BOEUserName=" + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
  	    	   if(data.SDMProfile != 'VIP' || data.IDSDM == 0){
- 	    		  $.notify("No esta dado de alta", "warn");
+  	    		  $('.loader').show();
+ 	    		  $.notify("El usuario con el que ingreso no se encuentra dado de alta.", "warn");
     		   }else{
     			   /*Obtiene el ID del cliente para dibujar la tabla de operaciones*/
     			   SDM.App.GetCustomerList(data.IDSDM);

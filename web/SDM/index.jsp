@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8"%>
+<%@ page import="java.io.*,java.util.*" %>
+<%@ page import="javax.servlet.*,java.text.*" %>
 <!DOCTYPE>
 <html>
 <head>
@@ -14,7 +16,8 @@
 <!--Cliente-->
 	<div class="large-4 columns">
 		<label>Cliente:</label>
-		<input id="autocomplete_customer" name="autocomplete_customer" autocomplete="on">
+		<select id="select_customer_filter" name="select_customer_filter"></select>
+		<!-- <input id="autocomplete_customer" name="autocomplete_customer" autocomplete="on"> -->
 	</div>
 	<div class="large-5 columns">
 		<!-- ESPACIO VACIO ENTRE COLUMNA CLIENTE Y PERIODO -->
@@ -22,15 +25,13 @@
 	<!--Periodo-->
 	<div class="large-3 columns">
 		<label>Periodo:</label>
-		<select class="full-width" id="selectstatus" name="selectstatus">
-			<option value="1">2016 - Q1</option>
-		</select>
+		<select class="full-width" id="selectperiod" name="selectperiod"></select>
 	</div>
 </div>
 <div class="row">
 <!--Cliente-->
 	<div class="large-6 columns">
-		<label>Métrica:</label>
+		<label>Nombre del proceso:</label>
 		<select class="full-width" id="selectmetric" name="selectmetric">
 			<option value="1">Incident</option>
 			<option value="2">Request</option>
@@ -48,32 +49,29 @@
         <tr>
             <th>Descripción</th>
             <th>Valor</th>
+            <th>Acción</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
             <th>Descripción</th>
             <th>Valor</th>
+            <th>Acción</th>
         </tr>
     </tfoot>
 </table>
  <div class="modalapp" id="modal_add_value">
       <div class="modalapp-content">
            <span class="closemodal">x</span>
-           <form id="form_operation_top" name="form_operation_top" class="form-default">
-	           <input type="text" style="display:none" id="operationId" name="operationId" />
-	           <input type="text" style="display:none" id="sdmId" name="sdmId"/>
-	           	<div class="row"><h3>Registro de nuevo valor</h3></div>
+           <form id="form_operation_top" name="form_operation_top" class="form-default"  >
+	           	<input type="text" style="display:none" id="operationId" name="operationId" />
+	           	<input type="text" style="display:none" id="sdmId" name="sdmId" />
+	           	<input type="text" style="display:none" id="selectcustomer" name="selectcustomer" />
+	           	<input type="text" style="display:none" id="processName" name="processName" />
+	           	<input type='text' style='display:none' id='timeId' name='timeId'  />
 	           	<div class="row">
-		           	<div class="large-6 columns">
-						<label>Cliente:</label>
-					    <select class="full-width" id="selectcustomer" name="selectcustomer"></select>
-					</div>
-					<div class="large-6 columns">
-						<label>Nombre del proceso:</label>
-						<input type="text" maxlength="100" id="processName" name="processName" />
-					</div>
-				</div>
+	           		<h3>Registro de nuevo valor</h3>
+	           	</div>
 				<div class="row">
 					<div class="large-4 columns">
 						<label>Valor:</label>

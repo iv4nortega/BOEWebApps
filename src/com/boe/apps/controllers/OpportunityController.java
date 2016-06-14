@@ -82,6 +82,7 @@ public class OpportunityController extends HttpServlet {
     	try
     	{
     		OpportunityModel opportunity = new OpportunityModel();
+    		request.setCharacterEncoding("UTF-8");
     		opportunity.setIDCustomer(Integer.parseInt(request.getParameter("new_record_customer")));
     		opportunity.setIDService(Integer.parseInt(request.getParameter("new_record_service")));
     		opportunity.setCost(request.getParameter( "new_record_amount" ));
@@ -104,9 +105,9 @@ public class OpportunityController extends HttpServlet {
     		 * para realizar su accion respectiva agregar/editar*/
     		String opportunityId = request.getParameter("new_record_id");
     		if( opportunityId == null || opportunityId.isEmpty()) 
-    			det.addOpportunity(opportunity);
+    			det.createOpportunity(opportunity);
     		else {
-    			opportunity.setIDUpCrossSelling( Integer.parseInt(opportunityId) );
+    			opportunity.setIDUpCrossSelling( Integer.parseInt(opportunityId));
     			det.updateOpportunity(opportunity);
     		}
     		request.setAttribute("opportunities", det.getAllOpportunity());

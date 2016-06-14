@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+	pageEncoding="UTF-8"%>
 <div class="modalapp" id="modal_new_record">
        <div class="modalapp-content">
        		 <div class="modalapp-header">
@@ -73,8 +75,8 @@
            </div>
            <div class="row">
                <div class="large-12 columns">
-		           <!--Descripción-->
-		           <label>Descripción:</label>
+		           <!--DescripciÃ³n-->
+		           <label>DescripciÃ³n:</label>
 		           <textarea class="textarea-100" id="new_record_description" name="new_record_description" ></textarea>
 		           <button type="submit" id="edit_save_button"><i class="fa fa-save"></i> Guardar</button>
                </div>

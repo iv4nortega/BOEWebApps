@@ -67,6 +67,7 @@ public class CommentController extends HttpServlet  {
 		try
 		{
 			String action = request.getParameter("action");
+			request.setCharacterEncoding("UTF-8");
 			CommentsModel comment = new CommentsModel();
 			if(action.equalsIgnoreCase("delete_comment"))
 			{

@@ -30,21 +30,39 @@ public class LAOImplementation implements LAOData {
 			Statement statement = DBUtil.VerifyConnection(conn);
 			ResultSet resultSet = statement.executeQuery("EXEC dbo.sp_getLAO "
 					+ "@BOEUser = '"+ userLogin + "', @BOEProfile = null;");
-//			ResultSet resultSet = statement.executeQuery("SELECT lao.*, "+
-//			  "Customer.CName as CustomerName, "+
-//			  "DetectionTime.[Date] as DetectionDate, "+
-//			  "PlannedTime.[Date] as PlannedDate, "+
-//			  "RealTime.[Date] as RealDate, "+
-//			  "CloseTime.[Date] as CloseDate, "+
-//			  "SDMs.SDMUserName as SDMUser, "+
-//			  "SDMs.SDMShortName as SDMName "+
-//			  "FROM LAO as lao "+
-//			    "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer "+
-//			    "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM "+
-//			    "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime "+
-//			    "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime "+
-//			    "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime "+
-//			    "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime");
+//			ResultSet resultSet = statement.executeQuery("SET @BOEProfile = (SELECT SDMProfile "+
+//			"FROM    D_SDMs "+
+//			"WHERE   SDMBOEFullName = '"+ userLogin + "') IF  @BOEProfile = 'VIP' "+
+//			      "SELECT lao.*, Customer.CName as CustomerName, "+
+//			        "DetectionTime.[Date] as DetectionDate, "+
+//			        "PlannedTime.[Date] as PlannedDate, "+
+//			        "RealTime.[Date] as RealDate, "+
+//			        "CloseTime.[Date] as CloseDate,  "+
+//			        "SDMs.SDMUserName as SDMUser, "+
+//			        "SDMs.SDMShortName as SDMName "+
+//			      "FROM LAO as lao "+
+//			        "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer "+ 
+//			        "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM "+
+//			          "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime "+ 
+//			          "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime "+
+//			          "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime "+
+//			          "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime "+
+//			"ELSE "+
+//			      "SELECT lao.*, Customer.CName as CustomerName, "+
+//			        "DetectionTime.[Date] as DetectionDate, "+
+//			        "PlannedTime.[Date] as PlannedDate, "+
+//			        "RealTime.[Date] as RealDate, "+
+//			        "CloseTime.[Date] as CloseDate, "+
+//			        "SDMs.SDMUserName as SDMUser, "+
+//			        "SDMs.SDMShortName as SDMName "+
+//			      "FROM LAO as lao "+
+//			        "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer "+ 
+//			        "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM "+
+//			          "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime "+ 
+//			          "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime "+
+//			          "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime "+
+//			          "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime "+
+//			      "where SDMs.SDMBOEFullName ='"+ userLogin + "' GO");
 			while( resultSet.next() ) {
 				LAOModel lao = new LAOModel();
 				lao.setIDLAO( resultSet.getInt("IDLAO" ));

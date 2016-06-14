@@ -9,19 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.boe.apps.data.OpportunityData;
-import com.boe.apps.data.OpportunityImplementation;
+import com.boe.apps.data.*;
 
 import flexjson.JSONSerializer;
 
 @WebServlet("/CustomerController")
 public class CustomerController extends HttpServlet{
 
-	private OpportunityData det;
+	private CustomerImplementation det;
 	private static final long serialVersionUID = 1L;
        
     public CustomerController() {
-    	det = new OpportunityImplementation();
+    	det = new CustomerImplementation();
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -34,6 +33,14 @@ public class CustomerController extends HttpServlet{
     	    if(action.equalsIgnoreCase("list_customers")){
     			response.setContentType("application/json");
     			String data = json.serialize(det.getAllCustomers());
+		        out.println(data);
+		        out.close();
+    		}
+    	    if(action.equalsIgnoreCase("list_customers_by_sdm"))
+    	    {
+    	    	String sdmName = request.getParameter("sdmName");
+    			response.setContentType("application/json");
+    			String data = json.serialize(det.getSDMCustomers(sdmName));
 		        out.println(data);
 		        out.close();
     		}

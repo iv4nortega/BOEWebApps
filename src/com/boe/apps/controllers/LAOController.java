@@ -89,6 +89,7 @@ public class LAOController extends HttpServlet {
 		{
 
 			LAOModel lao = new LAOModel();
+			request.setCharacterEncoding("UTF-8");
 			lao.setIDCustomer(Integer.parseInt(request.getParameter("selectcustomer")));
 			lao.setStatus(request.getParameter("selectstatus"));
 			lao.setIDDetectionTime(Integer.parseInt(request.getParameter("lao_date").replace("-", "")));

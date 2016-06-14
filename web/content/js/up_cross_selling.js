@@ -257,7 +257,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	              '</tr>'+
 	              '<tr>'+
 	              	'<td class="title" >Descripción:</td>'+
-	              	'<td colspan="5">'+ data.description+'</td>'+
+	              	'<td colspan="5">'+ data.description +'</td>'+
 	              '</tr>'+
 	              '<tr>'+
 	              /* Table of comments */

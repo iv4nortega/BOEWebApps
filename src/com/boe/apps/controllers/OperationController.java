@@ -35,17 +35,36 @@ public class OperationController extends HttpServlet  {
 	{
 		try
     	{
-    		String action = request.getParameter("action");
+    		String action = request.getParameter("g");
     	    PrintWriter out = response.getWriter();
     	    JSONSerializer json = new JSONSerializer();
-    	    if(action.equalsIgnoreCase("list_operation_top"))
-    	    {
-    	    	int idSDM  = Integer.parseInt(request.getParameter("BOEUserName"));
+    	    if(action.equalsIgnoreCase("operations")){
+    	    	int idSDM  = Integer.parseInt(request.getParameter("userid"));
     			response.setContentType("application/json");
     			String data = json.serialize(det.getAllOperations(idSDM));
 		        out.println("{ \"data\": "+ data + "}");
 		        out.close();
     		}
+    	    if(action.equalsIgnoreCase("edit")){
+    	    	int operationId  = Integer.parseInt(request.getParameter("operationId"));
+    			response.setContentType("application/json");
+    			String data = json.serialize(det.getOperationById(operationId));
+		        out.println(data);
+		        out.close();
+    		}
+    	    if(action.equalsIgnoreCase("process")){
+    	    	int idSDM = Integer.parseInt(request.getParameter("userid"));
+    	    	response.setContentType("application/json");
+    	    	String data = json.serialize(det.getProcess(idSDM));
+		        out.println(data);
+		        out.close();
+    	    }
+    	    if(action.equalsIgnoreCase("periods")){
+    	    	response.setContentType("application/json");
+    	    	String data = json.serialize(det.getQuarters());
+		        out.println(data);
+		        out.close();
+    	    }
     	}
     	catch(Exception ex) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
@@ -59,12 +78,13 @@ public class OperationController extends HttpServlet  {
 		try
     	{
 			OperationModel operation = new OperationModel();
+			request.setCharacterEncoding("UTF-8");
 			operation.setIDSDM(Integer.parseInt(request.getParameter("sdmId")));
 			operation.setCustomerId(Integer.parseInt(request.getParameter("selectcustomer")));
 			operation.setProcessName(request.getParameter("processName"));
 			operation.setQuantity(Integer.parseInt(request.getParameter("quantity")));
 			operation.setDescription(request.getParameter("description"));
-			
+			operation.setTimeId(Integer.parseInt(request.getParameter("timeId")));
     		/*Se agrega una condición 
     		 * para realizar su accion respectiva agregar/editar*/
     		String operationId = request.getParameter("operationId");
@@ -74,8 +94,6 @@ public class OperationController extends HttpServlet  {
     			operation.setIDOperationTop(Integer.parseInt(operationId) );
     			det.updateOperation(operation);
     		}
-    		request.setAttribute("operations", det.getAllOperations(operation.getIDSDM()));
-    		response.sendRedirect(LIST_OPERATIONS);
     	}
 		catch(Exception ex) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());

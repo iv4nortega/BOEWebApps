@@ -181,4 +181,35 @@ public class OpportunityImplementation implements OpportunityData {
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 	}
+
+	@Override
+	public List<CustomerModel> getAllCustomers() throws SQLException {
+		List<CustomerModel> customers = new ArrayList<CustomerModel>();
+		Statement statement = DBUtil.VerifyConnection(conn);
+		ResultSet resultSet = statement.executeQuery( "SELECT * FROM D_Customer ORDER BY CName ASC" );
+		while( resultSet.next() ) {
+			CustomerModel customer = new CustomerModel();
+			customer.setCustomerId( resultSet.getInt("IDCustomer") );
+			customer.setCustomerName( resultSet.getString("CName" ));
+			customers.add(customer);
+		}
+		resultSet.close();
+		statement.close();
+		return customers;
+	}
+	@Override
+	public List<ServiceModel> getAllServices() throws SQLException {
+		List<ServiceModel> services = new ArrayList<ServiceModel>();
+		Statement statement = DBUtil.VerifyConnection(conn);
+		ResultSet resultSet = statement.executeQuery( "SELECT * FROM Cat_Services" );
+		while( resultSet.next() ) {
+			ServiceModel service = new ServiceModel();
+			service.setServiceId( resultSet.getInt("IDService") );
+			service.setServiceName( resultSet.getString("Name" ));
+			services.add(service);
+		}
+		resultSet.close();
+		statement.close();
+		return services;
+	}
 }
