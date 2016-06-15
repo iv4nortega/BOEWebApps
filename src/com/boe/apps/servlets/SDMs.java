@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,15 +11,15 @@ import com.boe.apps.data.SDMImplementation;
 
 import flexjson.JSONSerializer;
 
-@WebServlet("/SDMController")
-public class SDMController extends HttpServlet{
+@WebServlet("/SDMs")
+public class SDMs extends HttpServlet{
 	/**
-	 * Controller que obtiene informacion de los SDM
+	 * Servlet que obtiene informacion de los SDM
 	 */
 	private SDMImplementation det;
 	private static final long serialVersionUID = 1L;
 
-	public SDMController(){
+	public SDMs(){
 		det = new SDMImplementation();
 	}
 	

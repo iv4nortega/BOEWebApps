@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,10 +15,10 @@ import com.boe.apps.models.OperationModel;
 
 import flexjson.JSONSerializer;
 
-@WebServlet("/OperationController")
-public class OperationController extends HttpServlet  {
+@WebServlet("/Operations")
+public class Operations extends HttpServlet  {
 	/**
-	 * Clase que realiza la obtencion de informacion para las métricas
+	 * Servlet que realiza la obtencion de informacion para las métricas
 	 * por usuario. 
 	 */
 	
@@ -26,7 +26,7 @@ public class OperationController extends HttpServlet  {
 	private static final long serialVersionUID = 1L;
 	public static final String LIST_OPERATIONS = "/BOEWebApps/SDM";
 	
-	public OperationController(){
+	public Operations(){
 		det = new OperationImplementation();
 	}
 	

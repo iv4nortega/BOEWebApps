@@ -9,7 +9,7 @@
 	           	<span class="closemodal">x</span>
 				<h5 class="modal-title">Registro de Acciones y Observaciones</h5>
       		</div>
-			<form method="post" class="form-default" novalidate="novalidate" id="form_create_lao" name="form_create_lao" action="../LAOController.do"  autocomplete="off">
+			<form method="post" class="form-default" novalidate="novalidate" id="form_create_lao" name="form_create_lao" action="../LAO.do"  autocomplete="off">
 			<input style="display:none" type="text" id="lao_id" name="lao_id">
 			<input style="display:none" type="text" id="lao_idSDM" name="lao_idSDM">
 			<input style="display:none" type="text" id="UserLogin" name="UserLogin">

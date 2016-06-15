@@ -13,7 +13,7 @@ BOEWebApp = (function ($, window, document, undefined) {
 	var GetBOEUserName = function(){
 		var frame = top.document.getElementsByName('servletBridgeIframe');
 		var fullusername = $(frame).contents().find('.bannerUserName').text().trim();
-		//fullusername = 'USRNAME LOCAL';
+		fullusername = 'LUIS MIGUEL LOPEZ MONTES DE OCA';
 		if(fullusername == null || fullusername == '')
 		{
 			fullusername = userunregistered;
@@ -23,7 +23,7 @@ BOEWebApp = (function ($, window, document, undefined) {
 	var OperationGetIdSDM = function()
     {
     	$.ajax({ type: "GET",   
- 	       url: "../SDMController.do?action=list_sdms&BOEUserName=" + BOEWebApp.GetBOEUserName(),   
+ 	       url: "../SDMs.do?action=list_sdms&BOEUserName=" + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
  	    	   if(data.SDMProfile != 'VIP' || data.IDSDM == 0){
   	    		  $('.loader').show();

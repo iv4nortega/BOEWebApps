@@ -15,7 +15,7 @@ public interface LAOData
 	public void deleteLAO(int laoId );
 	public void updateLAO(LAOModel lao);
 	public List<LAOModel> getLAORecords(String userLogin);
-	public List<NotesModel> getLAONotes(int laoId);
+	public List<CommentsModel> getLAONotes(int laoId);
 	public LAOModel getLAOById(int laoId) throws SQLException;
 	public UserBOEModel getUserProfile(String userLogin) throws SQLException;
 }

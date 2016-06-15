@@ -13,6 +13,8 @@ SDM.App = (function ($, window, document, undefined) {
 	/*funcion inicial para sdm carga todos los elementos iniciales*/
 	var Init = function()
 	{
+		var bridgeframe = top.document.getElementsByName('servletBridgeIframe');
+    	$(bridgeframe).contents().find('.newWindowIcon').hide();
 		/*Get SDM list for verify profile 
 		 * Obtiene el listado de SDM 
 		 * En el llamado llega a util.js para obtener el ID
@@ -48,8 +50,9 @@ SDM.App = (function ($, window, document, undefined) {
     {
     	/*Metodo ajax para listar los clientes por sdm*/
     	$.ajax({ type: 'GET',   
-    	       url: '../CustomerController.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
+    	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
     	       success : function(data){
+    	    	   
 					/*Obtiene el nombre de los procesos*/
 					GetProcessName(userId);
 					/* Dibuja la tabla de operaciones */
@@ -64,6 +67,9 @@ SDM.App = (function ($, window, document, undefined) {
     	                }, '<option/>'));
     	            });
     	    		$('#metrics_sdm_wrapper').find('input[type="search"]').val('');
+ 	    	       	if(listcustomers.val() == null){
+ 	    	       		$('#new_value').css('display', 'none');
+ 	    	   		}
     	       },
             error: function(error){
             	$.notify('No se pudo obtener el listado de clientes.', 'error');
@@ -73,7 +79,7 @@ SDM.App = (function ($, window, document, undefined) {
     /* Función que actualiza la operación mediante ajax*/
     var UpdateOperation = function(idOperation){
     	$.ajax({ type: "GET",   
- 	       url: "../OperationController.do?g=edit&operationId=" + idOperation,   
+ 	       url: "../Operations.do?g=edit&operationId=" + idOperation,   
  	       success : function(data){
  	    	   	$('#modal_add_value').css('display', 'block');
  			 	$('#modal_add_value').find('#operationId').val(data.IDOperationTop);
@@ -96,7 +102,7 @@ SDM.App = (function ($, window, document, undefined) {
     function GetProcessName(userId)
     {
     	$.ajax({ type: 'GET',   
- 	       url: '../OperationController.do?g=process&userid=' + userId,   
+ 	       url: '../Operations.do?g=process&userid=' + userId,   
  	       success : function(data){
  	    	   var list_process = $('#selectmetric');
  	    	  list_process.find('option').remove().end();
@@ -117,7 +123,7 @@ SDM.App = (function ($, window, document, undefined) {
     function GetPeriodsForDropDownlist()
     {
     	$.ajax({ type: 'GET',   
-  	       url: '../OperationController.do?g=periods',   
+  	       url: '../Operations.do?g=periods',   
   	       success : function(data){
   	    	  var list_process = $('#selectperiod');
   	    	  list_process.find('option').remove().end();
@@ -173,7 +179,7 @@ SDM.App = (function ($, window, document, undefined) {
     	        sortDescending : ' Descendente'
     	      }
     	    },
-    		ajax: "../OperationController?g=operations&userid="+ userId,
+    		ajax: "../Operations?g=operations&userid="+ userId,
     	    columns: [
     	        { data: 'description', name: 'description', width: '65%'},
     	        { data: 'quantity', name:'quantity', width: '20%'},
@@ -247,7 +253,7 @@ SDM.App = (function ($, window, document, undefined) {
 				/*Metodo ajax para listar los clientes por sdm*/
 		    	$.ajax({ 
 		    		type: 'POST',   
-		    	    url: '../OperationController',
+		    	    url: '../Operations',
 		    	    data: {
 		    	    	operationId: operationId,
 		    	    	sdmId: idsdm, 
@@ -279,7 +285,7 @@ SDM.App = (function ($, window, document, undefined) {
 //		$( "#autocomplete_customer" ).autocomplete({
 //  	      source: function( request, response ) {
 //  	        $.ajax({ type: 'GET',
-//  	    	     url: '../CustomerController.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName() ,
+//  	    	     url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName() ,
 //	     	         dataType: "json",
 //	     	         data: { customerName: request.term },
 //  	     	     success : function(data){

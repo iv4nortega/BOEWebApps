@@ -51,7 +51,7 @@ lao.app = (function ($, window, document, undefined) {
 			$.ajax({ 
 				type: "POST",
 				data: {id: comment_id},
-		       	url: "../CommentController.do?action=delete_comment",   
+		       	url: "../Comments.do?action=delete_comment",   
 		       	success : function(data){
 		       		GetComments(idlao);
 		       		comment_id = null;
@@ -125,7 +125,7 @@ lao.app = (function ($, window, document, undefined) {
     	        sortDescending : ' Descendente'
     	      }
     	    },
-    		ajax: "../LAOController?action=list_lao&UserLogin="+ BOEWebApp.GetBOEUserName(),
+    		ajax: "../LAOStadistics?action=list_lao&UserLogin="+ BOEWebApp.GetBOEUserName(),
     	    columns: [
     			{
 	                className:      'details-control',
@@ -272,7 +272,7 @@ lao.app = (function ($, window, document, undefined) {
 			$.ajax({ 
 				type: "POST",
 				data: {parentid: idselling, tableName: 'LAO', comment: comment_, useradded: user_boe},
-		       	url: "../CommentController.do?action=create_comment",   
+		       	url: "../Comments.do?action=create_comment",   
 		       	success : function(data){
 		       		GetComments(idselling);
 		       		$('#div_text_comment').hide();
@@ -292,7 +292,7 @@ lao.app = (function ($, window, document, undefined) {
     function GetCustomerList()
     {
     	$.ajax({ type: "GET",   
-    	       url: "../CustomerController.do?action=list_customers",   
+    	       url: "../Customers.do?action=list_customers",   
     	       success : function(data){
     	    	   var listcustomers = $('#selectcustomer');
     	    	   listcustomers.find('option').remove().end();
@@ -314,7 +314,7 @@ lao.app = (function ($, window, document, undefined) {
 	function GetComments(idParentItem)
 	{
 		$.ajax({ type: "GET",   
-		       url: "../CommentController.do?action=list_notes&tableItemId=" + idParentItem,   
+		       url: "../Comments.do?action=list_notes&tableItemId=" + idParentItem,   
 		       success : function(data){
 		    	   DrawComments(data)
 		       },
@@ -344,7 +344,7 @@ lao.app = (function ($, window, document, undefined) {
     function GetSDMS()
     {
     	$.ajax({ type: "GET",   
- 	       url: "../LAOController.do?action=list_sdms&UserLogin=" + BOEWebApp.GetBOEUserName(),   
+ 	       url: "../LAOStadistics.do?action=list_sdms&UserLogin=" + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
  	    	   $('#lao_idSDM').val(data.IDSDM);
  	    	   if(data.SDMProfile != 'VIP'){
@@ -445,7 +445,7 @@ lao.app = (function ($, window, document, undefined) {
 	var UpdateLAO = function(laoId)
 	{
 		$.ajax({ type: "GET",   
-	       url: "../LAOController.do?action=edit&IDLAO=" + laoId,   
+	       url: "../LAOStadistics.do?action=edit&IDLAO=" + laoId,   
 	       success : function(data){
 	    	   	$('#laoModal').css('display', 'block');
 			 	$('#laoModal').find('#lao_id').val(data.IDLAO);

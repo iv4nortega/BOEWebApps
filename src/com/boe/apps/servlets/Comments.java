@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,16 +17,16 @@ import flexjson.JSONSerializer;
 
 /**
  * @author Iván Hernández Ortega
- * Controller principal de acciones para comentarios Up Cross Selling, LAO y Operations
+ * Servlet principal de acciones para comentarios Up Cross Selling, LAO y Operations
  */
-@WebServlet("/CommentController")
-public class CommentController extends HttpServlet  {
+@WebServlet("/Comments")
+public class Comments extends HttpServlet  {
 	
 	private OpportunityData det;
 	private static final long serialVersionUID = 1L;
       
 	//Singleton Methods
-    public CommentController() {
+    public Comments() {
     	det = new OpportunityImplementation();
     }
     /*Metodo que obtiene el listado de comentarios para mostrarlos en 

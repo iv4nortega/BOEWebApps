@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,13 +14,13 @@ import com.boe.apps.data.OpportunityImplementation;
 
 import flexjson.JSONSerializer;
 
-@WebServlet("/ServiceController")
-public class ServiceController extends HttpServlet{
+@WebServlet("/Services")
+public class Services extends HttpServlet{
 
 	private OpportunityData det;
 	private static final long serialVersionUID = 1L;
        
-    public ServiceController() {
+    public Services() {
     	det = new OpportunityImplementation();
     }
     @Override

@@ -81,7 +81,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 			$.ajax({ 
 				type: "POST",
 				data: {id: comment_id},
-		       	url: "../CommentController.do?action=delete_comment",   
+		       	url: "../Comments.do?action=delete_comment",   
 		       	success : function(data){
 		       		GetComments(opportunity_id);
 		       		comment_id = null;
@@ -120,7 +120,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	   	});
 	   	/*Confirm delete record modal*/
 	   	$('#delete_confirm_record').on('click', function(){
-			window.location.href = "../OpportunityController.do?action=delete&IDUpCrossSelling=" + delIdRecord;
+			window.location.href = "../Opportunities.do?action=delete&IDUpCrossSelling=" + delIdRecord;
 			delIdRecord = null;
 		});
 	   	/*Show modal of new opportunity*/
@@ -129,7 +129,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	  	});
 	  	/*Initialize datatables plugin opportunity ajax*/
 	  	var table = $('#opportunitiesTable').DataTable({
-		  		ajax: "../OpportunityController?action=list_opportunities",
+		  		ajax: "../Opportunities?action=list_opportunities",
 		        columns: [
 		            {
 		                className:      'details-control',
@@ -279,7 +279,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	/*Modify opportunity record */
 	var UpdateOpportunity = function(record){
 		$.ajax({ type: "GET",   
-	       url: "../OpportunityController.do?action=edit&IDUpCrossSelling=" + record,   
+	       url: "../Opportunities.do?action=edit&IDUpCrossSelling=" + record,   
 	       success : function(data){
 	    	   $('#modal_new_record').css('display', 'block');
 	    	   $('#date_record_end').css('display', 'block');
@@ -304,7 +304,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	function GetCustomerList()
 	{
 		$.ajax({ type: "GET",   
-		       url: "../CustomerController.do?action=list_customers",   
+		       url: "../Customers.do?action=list_customers",   
 		       success : function(data){
 		    	   /*if data is not null show customer list in select customers*/
 		    	   if(data != null){
@@ -334,7 +334,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	function GetServiceList()
 	{
 		$.ajax({ type: "GET",   
-		       url: "../ServiceController.do?action=list_services",   
+		       url: "../Services.do?action=list_services",   
 		       success : function(data){
 		    	   if(data != null)
 	    		   {
@@ -361,7 +361,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	function GetComments(idParentItem)
 	{
 		$.ajax({ type: "GET",   
-		       url: "../CommentController.do?action=list_notes&tableItemId=" + idParentItem,   
+		       url: "../Comments.do?action=list_notes&tableItemId=" + idParentItem,   
 		       success : function(data){
 		    	   DrawComments(data)
 		       },
@@ -409,13 +409,13 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	var CreateComment = function(idselling, type)
 	{
 		var comment_ = $('#text_comment').val();
-		var user_boe = GetUserSessionBOE();
+		var user_boe = BOEWebApp.GetBOEUserName();
 		if(comment_ != '')
 		{
 			$.ajax({ 
 				type: "POST",
 				data: {parentid: idselling, tableName: type, comment: comment_, useradded: user_boe},
-		       	url: "../CommentController.do?action=create_comment",   
+		       	url: "../Comments.do?action=create_comment",   
 		       	success : function(data){
 		       		GetComments(idselling);
 		       		$('#div_text_comment').hide();
@@ -446,15 +446,6 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 			clickToHide: false
 		});
 	};
-	function GetUserSessionBOE(){
-		var frame = top.document.getElementsByName('servletBridgeIframe');
-		var fullusername = $(frame).contents().find('.bannerUserName').text().trim();
-		if(fullusername == null || fullusername == '')
-		{
-			fullusername = 'Usuario no registrado';
-		}
-		return fullusername;
-	}
 	return {
 	        Init: Init,
 	        CreateComment: CreateComment,

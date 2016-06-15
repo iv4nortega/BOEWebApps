@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,18 +16,18 @@ import com.boe.apps.models.OpportunityModel;
 import flexjson.JSONSerializer;
 /**
  * @author Iván Hernández Ortega
- * Controller principal de acciones 
+ * Servlet principal de acciones para oportunidades
  */
 
-@WebServlet("/OpportunityController")
-public class OpportunityController extends HttpServlet {
+@WebServlet("/Opportunities")
+public class Opportunities extends HttpServlet {
 
 	
 	private OpportunityData det;
 	private static final long serialVersionUID = 1L;
 	public static final String LIST_OPPORTUNITIES = "/BOEWebApps/UpCrossSelling";
        
-    public OpportunityController() {
+    public Opportunities() {
     	det = new OpportunityImplementation();
     }
     /*Metodo que obtiene las respectivas acciones desde el HTTPREQUEST*/

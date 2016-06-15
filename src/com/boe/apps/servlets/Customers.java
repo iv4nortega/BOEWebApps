@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,13 +13,13 @@ import com.boe.apps.data.*;
 
 import flexjson.JSONSerializer;
 
-@WebServlet("/CustomerController")
-public class CustomerController extends HttpServlet{
+@WebServlet("/Customers")
+public class Customers extends HttpServlet{
 
 	private CustomerImplementation det;
 	private static final long serialVersionUID = 1L;
        
-    public CustomerController() {
+    public Customers() {
     	det = new CustomerImplementation();
     }
     @Override

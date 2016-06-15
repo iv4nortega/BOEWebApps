@@ -6,7 +6,7 @@
 	           	<span class="closemodal">x</span>
 				<h4 class="modal-title">Registro de oportunidad</h4>
       		</div>
-           <form class="form-default" id="form_new_record" name="form_new_record" action="../OpportunityController.do"  method="post">
+           <form class="form-default" id="form_new_record" name="form_new_record" action="../Opportunities.do"  method="post">
            <input style="display:none" type="text" id="new_record_id" name="new_record_id">
            
            	<div class="row">

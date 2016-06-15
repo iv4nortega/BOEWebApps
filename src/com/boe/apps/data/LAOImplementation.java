@@ -91,15 +91,15 @@ public class LAOImplementation implements LAOData {
 	 * Obtiene el listado de oportunidades para mostrarse en el listado
 	 * */
 	@Override
-	public List<NotesModel> getLAONotes(int laoId) {
-		List<NotesModel> notesmodel = new ArrayList<NotesModel>();
+	public List<CommentsModel> getLAONotes(int laoId) {
+		List<CommentsModel> notesmodel = new ArrayList<CommentsModel>();
 		try {
 			String query = "SELECT * FROM Notes WHERE IDParentItem =?";
 			PreparedStatement statement = conn.prepareStatement( query );
 			statement.setInt(1, laoId);
 			ResultSet resultSet = statement.executeQuery();
 			while( resultSet.next() ) {
-				NotesModel notes = new NotesModel();
+				CommentsModel notes = new CommentsModel();
 				notes.setIDNote( resultSet.getInt("IDNote" ));
 				notes.setIDTableName(resultSet.getString("ID_TABLE_NAME" ));
 				notes.setNote( resultSet.getString("Note" ));

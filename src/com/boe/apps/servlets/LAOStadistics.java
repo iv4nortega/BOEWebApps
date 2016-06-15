@@ -1,4 +1,4 @@
-package com.boe.apps.controllers;
+package com.boe.apps.servlets;
 
 import java.io.*;
 
@@ -12,14 +12,14 @@ import com.boe.apps.models.LAOModel;
 
 import flexjson.JSONSerializer;
 
-@WebServlet("/LAOController")
-public class LAOController extends HttpServlet {
+@WebServlet("/LAOStadistics")
+public class LAOStadistics extends HttpServlet {
 	
 	private LAOData obj;
 	private static final long serialVersionUID = 1L;
 	public static final String INDEX_LAO = "/BOEWebApps/LAO";
 	
-	public LAOController(){
+	public LAOStadistics(){
 		obj = new LAOImplementation();
 	}
 	
