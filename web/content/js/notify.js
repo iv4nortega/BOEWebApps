@@ -180,7 +180,7 @@
 	var pluginOptions = {
 		clickToHide: true,
 		autoHide: true,
-		autoHideDelay: 10000,
+		autoHideDelay: 5000,
 		arrowShow: true,
 		arrowSize: 8,
 		breakNewLines: true,

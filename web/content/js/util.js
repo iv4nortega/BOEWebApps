@@ -13,7 +13,7 @@ BOEWebApp = (function ($, window, document, undefined) {
 	var GetBOEUserName = function(){
 		var frame = top.document.getElementsByName('servletBridgeIframe');
 		var fullusername = $(frame).contents().find('.bannerUserName').text().trim();
-		fullusername = 'LUIS MIGUEL LOPEZ MONTES DE OCA';
+		
 		if(fullusername == null || fullusername == '')
 		{
 			fullusername = userunregistered;

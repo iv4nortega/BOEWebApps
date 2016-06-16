@@ -23,7 +23,6 @@ Improvement.App = (function ($, window, document, undefined) {
 		 * */
 		/*Obtiene la lista de los periodos*/
 		GetPeriodsForDropDownlist();
-		DrawDataTable();
 		/*Muestra la animación al realizar un llamado ajax*/
 		$(document).ajaxStart(function() {
 		    $(".loader").show();
@@ -33,86 +32,123 @@ Improvement.App = (function ($, window, document, undefined) {
 		/*Al presionar el boton nuevo valor despliega el modal y asigna valores
 		 * para el nuevo registro
 		 * */
-		$('#new_value').on('click', function(){
-    		$('#modal_add_value').css('display', 'block');
-    		$('#selectcustomer').val($('#select_customer_filter').val());
-    		$('#processName').val($('#selectmetric').val());
+		$('#create_new_improvement').on('click', function(){
+			VerifyDataVal();
     	});
-		/*Al cerrar el modal carga nuevamente la url */
-    	$('.closemodal').on('click', function(){
-       		$('#modal_add_value').css('display', 'none');
-               window.location.href = "/BOEWebApps/SDM";
-       	});
 	};
-	 /*Get list customer for show in select 
-	  * of metrics view / llega el ID desde Util.js*/
-    var GetCustomerList = function (userId)
+	
+    /* Función que actualiza la operación mediante ajax*/
+    var UpdateImprovement = function(improvement_id){
+    	$.ajax({ type: "GET",   
+  	       url: "../Improvements.do?g=edit&improvementId=" + improvement_id,   
+  	       success : function(data){
+  	    	   	$('#modal_add_improvement').css('display', 'block');
+  			 	$('#modal_add_improvement').find('#improvementId').val(data.IDImprovement);
+  			 	$('#modal_add_improvement').find('#sdmId').val(data.IDSDM);
+  		     	$('#modal_add_improvement').find('#customer_selected').val(data.customerId);
+  		     	$('#modal_add_improvement').find('#improvement_description').val(data.description);
+  		     	$('#modal_add_improvement').find('#improvement_selected').val(data.typeImprovement);
+  		     	$('#modal_add_improvement').find('#timeId').val(data.timeId);
+  	       },
+  	       error: function(error){
+  	    	   $.notify("Error al obtener el ID.", "error");
+  	       }
+  		});
+    };
+    function VerifyDataVal()
     {
-    	/*Metodo ajax para listar los clientes por sdm*/
-    	$.ajax({ type: 'GET',   
-    	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
-    	       success : function(data){
-    	    	   
-					/*Obtiene el nombre de los procesos*/
-					GetProcessName(userId);
-					/* Dibuja la tabla de operaciones */
-					DrawDataTable(userId);
-					var listcustomers = $('#select_customer_filter');
-					listcustomers.find('option').remove().end();
-    	            $.each(data, function (index, item) {
-    	            	listcustomers.append(
-    	                $('<option>', {
-    	                    value: item.customerId,
-    	                    text: item.customerName
-    	                }, '<option/>'));
-    	            });
-    	    		$('#improvement_table_wrapper').find('input[type="search"]').val('');
- 	    	       	if(listcustomers.val() == null){
- 	    	       		$('#new_value').css('display', 'none');
- 	    	   		}
-    	       },
-            error: function(error){
-            	$.notify('No se pudo obtener el listado de clientes.', 'error');
-            }
+    	var customerfilter = $('#improvement_customer').val();
+		var improvementfilter = $('#improvement_select').val();
+		if(customerfilter == ''){
+			$('#improvement_customer').notify(
+					'Seleccione un cliente para filtrar, el cliente seleccionado se asignará al nuevo registro.',
+					'warn');
+			return false;
+		}
+		else if(improvementfilter == ''){
+			$('#improvement_select').notify('Seleccione una mejora para filtrar, la mejora seleccionada se asignará al nuevo registro.','warn');
+			return false;
+		}
+		if(customerfilter == null && improvementfilter == null){
+			$('#create_new_improvement').css('display', 'none');
+			return false;
+		}
+		if(customerfilter != '' && improvementfilter != ''){
+    		$('#modal_add_improvement').css('display', 'block');
+    		$('#customer_selected').val($('#improvement_customer').val());
+    		$('#improvement_selected').val($('#improvement_select').val());
+			return true;
+		}
+    }
+    /*Get list customer for show in select 
+	  * of metrics view / llega el ID desde Util.js*/
+	function GetCustomerList()
+	{
+	   	/*Metodo ajax para listar los clientes por sdm*/
+		$.ajax({ type: 'GET',   
+	   	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
+	   	       success : function(data){
+	   	    	   GetSDMByUserName();
+	   	    	   /* Dibuja la tabla de operaciones */
+	   	    	   DrawDataTable();
+	   	    	   var listcustomers = $('#improvement_customer');
+	   	    	   listcustomers.find('option').remove().end();
+	   	           $.each(data, function (index, item) {
+	   	        	   listcustomers.append(
+	   	               $('<option>', {
+	   	            	   value: item.customerId,
+	   	            	   text: item.customerName
+	   	               }, '<option/>'));
+	   	           });
+	   	        $("#improvement_customer").prepend("<option value=''></option>").val('');
+	   	        $('#improvement_table_wrapper').find('input[type="search"]').val('');
+	   	        if(listcustomers.val() == null){
+	   	        	$('#new_value').css('display', 'none');
+	   	        }
+	   	       },
+	   	       error: function(error){
+	   	    	   $.notify('No se pudo obtener el listado de clientes.', 'error');
+	   	       }
+		});
+	 };
+    function GetSDMByUserName()
+    {
+    	$.ajax({ type: "GET",   
+ 	       url: "../SDMs.do?action=list_sdms&BOEUserName=" + BOEWebApp.GetBOEUserName(),   
+ 	       success : function(data){
+ 	    	   if(data.SDMProfile != 'VIP' || data.IDSDM == 0){
+  	    		  $('.loader').show();
+ 	    		  $.notify("El usuario con el que ingreso no se encuentra dado de alta.", "warn");
+    		   }else{
+    			   $('#sdmId').val(data.IDSDM);
+    		   }
+ 	       },
+         error: function(error){
+        	 if(error.responseText.match('conexión')){
+        		 $.notify("Hubo un problema con la conexión a la base de datos.", "error");
+    		 }
+        	 else
+         		$.notify("No se pudieron obtener los SDM.", "error");
+         }
     	});
     };
-    /* Función que actualiza la operación mediante ajax*/
-    var UpdateImprovement = function(idOperation){
-    	$.ajax({ type: "GET",   
- 	       url: "../Operations.do?g=edit&operationId=" + idOperation,   
- 	       success : function(data){
- 	    	   	$('#modal_add_value').css('display', 'block');
- 			 	$('#modal_add_value').find('#operationId').val(data.IDOperationTop);
- 			 	$('#modal_add_value').find('#sdmId').val(data.IDSDM);
- 		     	$('#modal_add_value').find('#selectcustomer').val(data.customerId);
- 		     	$('#modal_add_value').find('#description').val(data.description);
- 		     	$('#modal_add_value').find('#selectmetric').val(data.processName);
- 		     	$('#modal_add_value').find('#quantity').val(data.quantity);
- 		     	$('#modal_add_value').find('#timeId').val(data.timeId);
- 	       },
- 	       error: function(error){
- 	    	   $.notify("Error al obtener el ID.", "error");
- 	       }
- 		});
-    	
-    	
-    };
-    /*Get ProcessName/Metrics*
+    /*Get improvement_selected/Metrics*
      * */
-    function GetProcessName(userId)
+    function GetTypeImprovements()
     {
     	$.ajax({ type: 'GET',   
- 	       url: '../Operations.do?g=process&userid=' + userId,   
+ 	       url: '../Improvements.do?g=typeImprovements&user_boe=' + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
- 	    	   var list_process = $('#selectmetric');
- 	    	  list_process.find('option').remove().end();
+ 	    	   var list_improvements = $('#improvement_select');
+ 	    	  list_improvements.find('option').remove().end();
  	            $.each(data, function (index, item) {
- 	            	list_process.append(
+ 	            	list_improvements.append(
  	                $('<option>', {
- 	                    value: item.processName,
- 	                    text: item.processName
+ 	                    value: item.text,
+ 	                    text: item.text
  	                }, '<option/>'));
  	            });
+ 	           $("#improvement_select").prepend("<option value=''></option>").val('');
  	       },
          error: function(error){
          	$.notify('No se pudo obtener el listado de clientes.', 'error');
@@ -125,18 +161,21 @@ Improvement.App = (function ($, window, document, undefined) {
     	$.ajax({ type: 'GET',   
   	       url: '../Operations.do?g=periods',   
   	       success : function(data){
-  	    	  var list_process = $('#selectperiod');
-  	    	  list_process.find('option').remove().end();
+  	    	 /*Obtiene el listado de clientes por usuario*/
+  	    	 GetCustomerList();
+  	    	 /*Se agrega al dropdown el listado de periodos*/
+  	    	  var list_period_improvement = $('#improvement_selectperiod');
+  	    	  list_period_improvement.find('option').remove().end();
   	            $.each(data, function (index, item) {
-  	            	list_process.append(
+  	            	list_period_improvement.append(
   	                $('<option>', {
   	                    value: item.idTime,
   	                    text: item.year + " - Q" + item.quarter
   	                }, '<option/>'));
   	            });
-  	          $('#selectperiod option:eq(2)').prop('selected', true);
+  	          $('#improvement_selectperiod option:eq(2)').prop('selected', true);
   	          /*Asigna el periodo actual para nuevos registros*/
-  	          $('#timeId').val($('#selectperiod option:eq(2)').val());
+  	          $('#timeId').val($('#improvement_selectperiod option:eq(2)').val());
   	       },
           error: function(error){
           	$.notify('No se pudo obtener los periodos.', 'error');
@@ -146,6 +185,7 @@ Improvement.App = (function ($, window, document, undefined) {
     /*Dibuja la tabla apartir del id del usuario que ingresa a la app*/
     function DrawDataTable()
     {
+    	GetTypeImprovements();
     	/*Le asigna el valor del SDM al modal con input hide
     	 * Necesario para realizar las consultas por SDM 
     	 * */
@@ -153,7 +193,7 @@ Improvement.App = (function ($, window, document, undefined) {
     	var table = $('#improvement_table').DataTable({
     		select: true, 
     		ordering: true,
-    		order: [1, 'asc'],
+    		order: [0, 'asc'],
     	    language : {
     	      emptyTable     : 'No existen registros.',
     	      zeroRecords    : 'No se encontraron resultados.',
@@ -180,7 +220,7 @@ Improvement.App = (function ($, window, document, undefined) {
     	    },
     		ajax: "../Improvements?g=list_improvements&user_boe="+ BOEWebApp.GetBOEUserName(),
     	    columns: [
-    	        { data: 'description', name: 'description', width: '80%'},
+    	        { data: 'description', name: 'improvement_description', width: '80%'},
     	        {
 	                className:      '',
 	                width: "20%",
@@ -197,76 +237,63 @@ Improvement.App = (function ($, window, document, undefined) {
     	        { data: 'timeId', name: 'timeId', visible: false}
     	    ],
     	});
-//    	/*Busqueda por default del periodo, muestra el periodo actual*/
-//    	table.column('timeId:name').search($('#selectperiod').val()).draw();
-//		/*Filtro para process name/metricas al seleccionar metricas*/
-//		$('#selectmetric').on('change', function(){
-//			/*busqueda al seleccionar las metricas*/
-//			table.column('processName:name').search(this.value).draw();
-//		});
-//		/*Filtro para process name/metricas al seleccionar metricas*/
-//		$('#select_customer_filter').on('change', function(){
-//			/*busqueda al seleccionar las metricas*/
-//			table.column('customerId:name').search(this.value).draw();
-//		});
-//		/*Filtro para process name/metricas al seleccionar metricas*/
-//		$('#selectperiod').on('change', function(){
-//			/*busqueda al seleccionar las metricas*/
-//			table.column('timeId:name').search(this.value).draw();
-//		});
+    	/*Busqueda por default del periodo, muestra el periodo actual*/
+    	table.column('timeId:name').search($('#improvement_selectperiod').val()).draw();
+		/*Filtro para process name/metricas al seleccionar metricas*/
+		$('#improvement_select').on('change', function(){
+			/*busqueda al seleccionar las metricas*/
+			table.column('typeImprovement:name').search(this.value).draw();
+		});
+		/*Filtro para process name/metricas al seleccionar metricas*/
+		$('#improvement_customer').on('change', function(){
+			/*busqueda al seleccionar las metricas*/
+			table.column('customerId:name').search(this.value).draw();
+		});
+		/*Filtro para process name/metricas al seleccionar metricas*/
+		$('#improvement_selectperiod').on('change', function(){
+			/*busqueda al seleccionar las metricas*/
+			table.column('timeId:name').search(this.value).draw();
+		});
 
     	/* Validate form by jquery validate plugin*/
-	  	$('#form_operation_top').validate({
+	  	$('#form_improvement').validate({
 			rules : {
-				processName: {
-					required: true
-				},
-				quantity: {
-					required: true,
-					maxlength: 10
-				},
-				description: {
+				improvement_description: {
 					required: true,
 					maxlength: 512
 				}
 			},
 			messages:{
-				processName: 'Ingrese el nombre del proceso.',
-				quantity: {
-					required: 'Ingrese un valor.',
-					maxlength: 'Número máximo de caracteres es {0}.'
-				},
-				description: {
+				improvement_description: {
 					required: 'Ingrese descripción.',
 					maxlength: 'Número máximo de caracteres es {0}.'
 				}
 			},
 			submitHandler: function() {
-				var operationId = $('#operationId').val(),
+				var customerName = $('#improvement_customer option:selected').text(),
+				improvement_id = $('#improvementId').val(),
 				idsdm = $('#sdmId').val(),
-				customer = $('#selectcustomer').val(),
-				customerName = $('#select_customer_filter option:selected').text(),
-				processName = $('#selectmetric').val(), quantity = $('#quantity').val(), 
-				description = $('#description').val(), time = $('#timeId').val();
+				customer = $('#customer_selected').val(),
+				improvement_selected = $('#improvement_selected').val(),
+				improvement_description = $('#improvement_description').val(),
+				time = $('#timeId').val();
 				/*Metodo ajax para listar los clientes por sdm*/
 		    	$.ajax({ 
 		    		type: 'POST',   
-		    	    url: '../Operations',
+		    	    url: '../Improvements',
 		    	    data: {
-		    	    	operationId: operationId,
+		    	    	improvementId: improvement_id,
 		    	    	sdmId: idsdm, 
-		    	    	selectcustomer: customer, 
-		    	    	processName: processName, 
-		    	    	quantity:quantity , 
-		    	    	description: description,
+		    	    	customer: customer, 
+		    	    	improvement: improvement_selected,
+		    	    	description: improvement_description,
 		    	    	timeId: time
 		    	    },
 		    	    success : function(data){
-		    	    	$('#modal_add_value').css('display', 'none');
-		    	    	$('#form_operation_top').find('#operationId').val('');
-		    	    	$('#form_operation_top').find('#quantity').val('');
-		    	    	$('#form_operation_top').find('#description').val('');
-		    	    	$.notify('El "'+ processName + '" para "'+ customerName  +'" se ha guardado correctamente.', 'success');
+		    	    	$('#modal_add_improvement').css('display', 'none');
+		    	    	$('#form_improvement').find('#improvementId').val('');
+		    	    	$('#form_improvement').find('#improvement_description').val('');
+		    	    	$.notify('El registro para "'+ customerName  +'" se ha guardado correctamente.', 'success');
 		    	    	table.ajax.reload();
 		    	    },
 		            error: function(error){
@@ -277,8 +304,17 @@ Improvement.App = (function ($, window, document, undefined) {
 		});
 	  	/*Actualiza la tabla en un intervalo de 30seg*/
 	  	setInterval( function () {
-	  	    //table.ajax.reload();
-	  	}, 20000);
+	  	    table.ajax.reload();
+	  	}, 30000);
+
+		/*Al cerrar el modal carga nuevamente la url */
+    	$('.closemodal').on('click', function(){
+       		$('#modal_add_improvement').css('display', 'none');
+       		$('#form_improvement').find('#improvement_description').val('');
+       		$('#form_improvement').find('#improvement_description').removeClass('error');
+       		$('#form_improvement').find('#improvement_description-error').remove();
+       		table.ajax.reload();
+       	});
     	/*Auto Complete para la busqueda de clientes en la página principal*/
 //		$( "#autocomplete_customer" ).autocomplete({
 //  	      source: function( request, response ) {
@@ -304,7 +340,7 @@ Improvement.App = (function ($, window, document, undefined) {
 //  	      select: function( event, ui ) {
 //  	    	/*Al seleccionar el cliente realiza la busqueda en la tabla
 //  	    	 * */
-//  	    	  $('#selectcustomer').val(ui.item.id);
+//  	    	  $('#customer_selected').val(ui.item.id);
 //  	    	  table.search(ui.item.label).draw();
 //  	    	  /*Para no duplicar el valor en el input de busqueda se limpia al realizar la busqueda*/
 //  	    	  $('#metrics_sdm_wrapper').find('input[type="search"]').val('');
