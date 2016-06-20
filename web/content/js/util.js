@@ -42,7 +42,23 @@ BOEWebApp = (function ($, window, document, undefined) {
          }
     	});
     };
+    /*GENERAL DATEPICKER OPTIONS*/
+    var DatePickerGral = function(form, inputctrl)
+	{
+		$(inputctrl).datepicker({ 
+			dateFormat: 'yy-mm-dd',
+			autoclose: true,
+			language: 'es',
+			showAnim: 'slideDown',
+			onSelect: function(date) {
+				$(inputctrl).val(date);
+	            var validator = $(form).validate();
+				validator.element( inputctrl );
+	        },
+		});
+	}
 	return {
+		DatePickerGral : DatePickerGral,
 		GetBOEUserName : GetBOEUserName,
 		OperationGetIdSDM: OperationGetIdSDM
 	};

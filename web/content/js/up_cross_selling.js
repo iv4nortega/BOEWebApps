@@ -97,21 +97,15 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		  $(this).trigger('notify-hide');
 		});
 		/*Mask for date*/
-	    $('#new_record_date').inputmask({
-			mask: 'y-m-d'
-		});
+	    $('#new_record_date').inputmask({mask: 'y-m-d'});
 		/*Mask for date start*/
-	    $('#new_record_date_start').inputmask({
-			mask: 'y-m-d'
-		});
+	    $('#new_record_date_start').inputmask({ mask: 'y-m-d'});
 	    /*Mask for date end*/
-	    $('#new_record_date_end').inputmask({
-			mask: 'y-m-d'
-		});
-		/*Initialize date pickers*/
-		DatePickerGral('#new_record_date');
-		DatePickerGral('#new_record_date_start');
-		DatePickerGral('#new_record_date_end');
+	    $('#new_record_date_end').inputmask({ mask: 'y-m-d' });
+	    /*Initialize date pickers*/
+	    BOEWebApp.DatePickerGral('#form_new_record','#new_record_date');
+	    BOEWebApp.DatePickerGral('#form_new_record','#new_record_date_start');
+	    BOEWebApp.DatePickerGral('#form_new_record','#new_record_date_end');
 	   	/*Close the modal where hide delete record and new record opportunity*/
 	   	$('.closemodal').on('click', function(){
 	   		$('#modal_delete_record').css('display', 'none');
@@ -190,15 +184,16 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	  	/* Validate form by jquery validate plugin*/
 	  	$('#form_new_record').validate({
 			rules : {
-				new_record_amount: 'required',
+				new_record_amount: {
+					required: true
+				},
 				new_record_probability: {
 					required : true,
 					max: 100,
 					maxlength: 3
 				},
 				new_record_date: {
-					required: true,
-					date: true
+					required: true
 				},
 				new_record_description: {
 					required: true,
@@ -289,9 +284,9 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	    	   $('#modal_new_record').find('#new_record_service').val(data.IDService);
 	    	   $('#modal_new_record').find('#new_record_amount').val(data.cost);
 	    	   $('#modal_new_record').find('#new_record_probability').val(data.probability);
-	    	   $('#modal_new_record').find('#new_record_date').val(data.IDTimeTentative);
-	    	   $('#modal_new_record').find('#new_record_date_start').val(data.IDTimeStart);
-	    	   $('#modal_new_record').find('#new_record_date_end').val(data.IDTimeEnd);
+	    	   $('#modal_new_record').find('#new_record_date').val(data.IDTimeTentative).mouseover();
+	    	   $('#modal_new_record').find('#new_record_date_start').val(data.IDTimeStart).mouseover();
+	    	   $('#modal_new_record').find('#new_record_date_end').val(data.IDTimeEnd).mouseover();
 	    	   $('#modal_new_record').find('#new_record_description').val(data.description);
 	    	   $('#modal_new_record').find('#new_record_type_sale').val(data.type);
 	       },
@@ -392,19 +387,6 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	function formatMoney(n, currency) {
 		var money = parseFloat(n).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
 	    return currency + money;
-	}
-	/*GENERAL DATEPICKER OPTIONS*/
-	function DatePickerGral(inputctrl)
-	{
-		$(inputctrl).datepicker({ 
-			dateFormat: 'yy-mm-dd',
-			autoclose: true,
-			language: 'es',
-			showAnim: 'slideDown',
-		}).on('change', function(e){
-			var validator = $( "#form_new_record" ).validate();
-			validator.element( inputctrl );
-		});
 	}
 	var CreateComment = function(idselling, type)
 	{

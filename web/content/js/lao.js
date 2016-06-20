@@ -93,9 +93,9 @@ lao.app = (function ($, window, document, undefined) {
     		mask: 'y-m-d'
     	});
         /*INIT DATEPICKER*/
-    	DatePickerGral('#date_planned');
-    	DatePickerGral('#date_real');
-    	DatePickerGral('#date_close');
+        BOEWebApp.DatePickerGral('#form_create_lao', '#date_planned');
+        BOEWebApp.DatePickerGral('#form_create_lao', '#date_real');
+        BOEWebApp.DatePickerGral('#form_create_lao', '#date_close');
     	/*OBTIENE LA LISTA DE ACTIVIDADES*/
     	var table = $('#lao_table').DataTable({
     		select: true, 
@@ -209,20 +209,20 @@ lao.app = (function ($, window, document, undefined) {
 		 	$('#laoModal').find('#lao_id').val(tableData.IDLAO);
 		 	//$('#laoModal').find('#lao_date').val(tableData.detectionDate);
 		 	$('#laoModal').find('#selectcustomer').val(tableData.IDCustomer);
-	     	$('#laoModal').find('#date_planned').val(tableData.plannedDate);
-	     	$('#laoModal').find('#date_real').val(tableData.realDate);
-	     	$('#laoModal').find('#date_close').val(tableData.closeDate);
+	     	$('#laoModal').find('#date_planned').val(tableData.plannedDate).mouseover();
+	     	$('#laoModal').find('#date_real').val(tableData.realDate).mouseover();
+	     	$('#laoModal').find('#date_close').val(tableData.closeDate).mouseover();
 	     	$('#laoModal').find('#subject').val(tableData.subject);
 	     	$('#laoModal').find('#comments').val(tableData.comments);
 	     	$('#laoModal').find('#selectstatus').val(tableData.status);
+	     	
     		ChangeStatusDefault(tableData.status);
     	} );
     	/* Validate form by jquery validate plugin*/
 	  	$('#form_create_lao').validate({
 			rules : {
 				date_planned: {
-					required: true,
-					date: true
+					required: true
 				},
 				subject: {
 					required: true,
@@ -234,7 +234,7 @@ lao.app = (function ($, window, document, undefined) {
 				}
 			},
 			messages:{
-				date_planned: 'Ingrese la fecha planeada.',
+				date_planned: { required: 'Ingrese la fecha planeada.'},
 				subject: {
 					required: 'Ingrese un asunto.',
 					maxlength: 'Número máximo de caracteres es {0}.'
@@ -451,9 +451,9 @@ lao.app = (function ($, window, document, undefined) {
 			 	$('#laoModal').find('#lao_id').val(data.IDLAO);
 			 	//$('#laoModal').find('#lao_date').val(data.IDDetectionTime);
 			 	$('#laoModal').find('#selectcustomer').val(data.IDCustomer);
-		     	$('#laoModal').find('#date_planned').val(data.IDPlannedTime);
-		     	$('#laoModal').find('#date_real').val(data.IDRealTime);
-		     	$('#laoModal').find('#date_close').val(data.IDCloseTime);
+		     	$('#laoModal').find('#date_planned').val(data.IDPlannedTime).mouseover();
+		     	$('#laoModal').find('#date_real').val(data.IDRealTime).mouseover();
+		     	$('#laoModal').find('#date_close').val(data.IDCloseTime).mouseover();
 		     	$('#laoModal').find('#subject').val(data.subject);
 		     	$('#laoModal').find('#comments').val(data.comments);
 		     	$('#laoModal').find('#selectstatus').val(data.status);
