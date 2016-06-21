@@ -30,7 +30,7 @@ public class CustomerImplementation implements CustomerData
 		List<CustomerModel> returnValues = new ArrayList<CustomerModel>();
 		try {
 			Statement statement = DBUtil.VerifyConnection( this.conn );
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM D_Customer;");
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM D_Customer Order By D_Customer.CName;");
 
 			while( resultSet.next() ) {
 				CustomerModel customer = new CustomerModel();
@@ -64,7 +64,8 @@ public class CustomerImplementation implements CustomerData
 					"    INNER JOIN D_Customer On D_Project.IDCustomer 	= D_Customer.IDCustomer " +
 					"    INNER JOIN D_SDMs ON D_Project.IDSDM 			= D_SDMs.IDSDM " + 
 					" WHERE D_SDMs.SDMBOEFullName = ? " +
-					" 	AND D_Project.ValidTo is null " );
+					" 	AND D_Project.ValidTo is null " + 
+					" Order By D_Customer.CName ");
 			
 			statement.setString(1, sdmName);
 			ResultSet resultSet = statement.executeQuery();
