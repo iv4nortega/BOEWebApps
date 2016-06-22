@@ -18,4 +18,5 @@ public interface LAOData
 	public List<CommentsModel> getLAONotes(int laoId);
 	public LAOModel getLAOById(int laoId) throws SQLException;
 	public UserBOEModel getUserProfile(String userLogin) throws SQLException;
+	public void changeStatus() throws SQLException;
 }

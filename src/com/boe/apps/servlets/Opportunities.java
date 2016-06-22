@@ -36,12 +36,13 @@ public class Opportunities extends HttpServlet {
 		String action = request.getParameter( "action" );
 	    PrintWriter out = response.getWriter();
 	    JSONSerializer json = new JSONSerializer();
+	    response.setContentType("application/json");
 		try{
 			/*Obtiene el listado de oportunidades*/
 			if(action.equalsIgnoreCase("list_opportunities")){
-				response.setContentType("application/json");
 			    try {
-			    	String data = json.serialize(det.getAllOpportunity());
+					String boeuser = request.getParameter("BOEUser");
+			    	String data = json.serialize(det.getAllOpportunity(boeuser));
 			        out.println("{ \"data\": "+ data + "}");
 			    } finally {
 			        out.close();
@@ -51,7 +52,6 @@ public class Opportunities extends HttpServlet {
 			else if( action.equalsIgnoreCase( "delete" ) ) {
 				int opportunityId = Integer.parseInt( request.getParameter("IDUpCrossSelling") );
 				det.deleteOpportunity(opportunityId);
-				request.setAttribute("opportunities", det.getAllOpportunity() );
 				response.sendRedirect(LIST_OPPORTUNITIES);
 			}
 			/*Actualiza una oportunidad*/
@@ -59,8 +59,6 @@ public class Opportunities extends HttpServlet {
 				int opportunityId = Integer.parseInt( request.getParameter("IDUpCrossSelling") );
 				OpportunityModel opportunity = det.getOpportunityById(opportunityId);
 				request.setAttribute("opportunities", opportunity);
-				
-				response.setContentType("application/json");
 			    try {
 			        out.println(json.serialize(opportunity));
 			    } finally {
@@ -89,6 +87,7 @@ public class Opportunities extends HttpServlet {
     		opportunity.setProbability(Float.parseFloat(request.getParameter( "new_record_probability" )));
     		opportunity.setDescription(request.getParameter( "new_record_description" ));
     		opportunity.setType(request.getParameter( "new_record_type_sale" ));
+    		opportunity.setIDSDM(Integer.parseInt(request.getParameter( "idsdm" )));
     		String timeTentative = request.getParameter( "new_record_date" ).replace("-", "");
     		opportunity.setIDTimeTentative(Integer.parseInt(timeTentative));
     		/*Fecha Inicial*/
@@ -110,7 +109,6 @@ public class Opportunities extends HttpServlet {
     			opportunity.setIDUpCrossSelling( Integer.parseInt(opportunityId));
     			det.updateOpportunity(opportunity);
     		}
-    		request.setAttribute("opportunities", det.getAllOpportunity());
     		response.sendRedirect(LIST_OPPORTUNITIES);
     	}
     	catch (Exception ex)

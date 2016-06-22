@@ -16,7 +16,7 @@ public interface OpportunityData
 	public void deleteComment(int commentId ) throws SQLException;
 	public void updateOpportunity(OpportunityModel opportunity) throws SQLException;
 	public List<CommentsModel> getComments(int laoId) throws SQLException;
-	public List<OpportunityModel> getAllOpportunity() throws SQLException;
+	public List<OpportunityModel> getAllOpportunity(String boeuser) throws SQLException;
 	public OpportunityModel getOpportunityById(int oportunityId) throws SQLException;
 	public List<CustomerModel> getAllCustomers() throws SQLException;
 	public List<ServiceModel> getAllServices() throws SQLException;

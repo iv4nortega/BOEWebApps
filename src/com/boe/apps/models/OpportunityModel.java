@@ -22,6 +22,8 @@ public class OpportunityModel
 	private String customerName;
 	private String serviceName;
 	private String type;
+	private int idSDM;
+	private String SDMName;
 	
 	/*ID DE OPORTUNITY*/
 	public int getIDUpCrossSelling() {
@@ -127,6 +129,20 @@ public class OpportunityModel
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	/*Id del SDM*/
+	public int getIDSDM() {
+		return idSDM;
+	}
+	public void setIDSDM(int sdmid) {
+		this.idSDM = sdmid;
+	}
+	/*Nombre del SDM*/
+	public String getSDMName() {
+		return SDMName;
+	}
+	public void setSDMName(String name) {
+		this.SDMName = name;
 	}
 //	@Override
 //	public String toString() {

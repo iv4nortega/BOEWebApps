@@ -27,23 +27,56 @@ public class OpportunityImplementation implements OpportunityData {
 	 * Obtiene el listado de oportunidades para mostrarse en el listado
 	 * */
 	@Override
-	public List<OpportunityModel> getAllOpportunity() throws SQLException {
+	public List<OpportunityModel> getAllOpportunity(String boeuser) throws SQLException {
 		List<OpportunityModel> opportunities = new ArrayList<OpportunityModel>();
 		Statement statement = DBUtil.VerifyConnection(conn);
-		ResultSet resultSet = statement.executeQuery( "SELECT Opp.*,"+ 
-			  "Customers.CName as CustomerName,"+ 
-			  "Services.Name as ServiceName,"+
-			  "TimeStart.[Date] as DateStart,"+
-			  "TimeEnd.[Date] as DateEnd,"+
-			  "TimeTentative.[Date] as DateTentative " +
-		"FROM Oportunity as Opp "+ 
-			"INNER JOIN D_Customer as Customers " +
-			"ON Opp.IDCustomer = Customers.IDCustomer "+
-				"INNER JOIN Cat_Services as Services "+
-				"ON Opp.IDService = Services.IDService "+
-					"LEFT JOIN D_Time as TimeStart ON Opp.IDTimeStart = TimeStart.IDTime " +
-					"LEFT JOIN D_Time as TimeEnd ON Opp.IDTimeEnd = TimeEnd.IDTime " +
-					"LEFT JOIN D_Time as TimeTentative ON Opp.IDTimeTentative = TimeTentative.IDTime");
+		ResultSet resultSet = statement.executeQuery( 
+		"DECLARE @profileSDM nvarchar(10) "+
+		"DECLARE @UserFullName nvarchar(256) "+
+		"SET @UserFullName = '"+ boeuser + "'" +
+		"SET @profileSDM = (select SDMProfile FROM D_SDMs "+
+		"WHERE SDMBOEFullName = @UserFullName) "+
+		"IF(@profileSDM = 'VIP') "+
+			"BEGIN "+
+				"SELECT opp.*, "+
+				"cus.CName as CustomerName, "+
+				"ser.Name as ServiceName, "+
+				"sdms.SDMShortName as SDMName, "+
+				"timeStart.[Date] as DateStart, "+
+				"timeEnd.[Date] as DateEnd, "+
+				"timeTentative.[Date] as DateTentative "+ 
+				"from Oportunity  opp "+
+					"INNER JOIN D_SDMs as sdms "+
+						"on opp.IDSDM = sdms.IDSDM "+
+					"INNER JOIN D_Customer as cus "+
+						"on opp.IDCustomer = cus.IDCustomer "+
+					"INNER JOIN Cat_Services as ser "+
+						"on opp.IDService = ser.IDService "+
+					"LEFT JOIN D_Time as timeStart ON opp.IDTimeStart = timeStart.IDTime "+
+					"LEFT JOIN D_Time as timeEnd ON opp.IDTimeEnd = timeEnd.IDTime "+
+					"LEFT JOIN D_Time as timeTentative ON opp.IDTimeTentative = timeTentative.IDTime "+
+			"END "+
+		"ELSE "+
+			"BEGIN "+
+				"SELECT opp.*, "+
+				"cus.CName as CustomerName, "+
+				"ser.Name as ServiceName, "+
+				"sdms.SDMShortName as SDMName, "+
+				"timeStart.[Date] as DateStart, "+
+				"timeEnd.[Date] as DateEnd, "+
+				"timeTentative.[Date] as DateTentative  "+
+				"from Oportunity  opp "+
+					"INNER JOIN D_SDMs as sdms "+
+						"on opp.IDSDM = sdms.IDSDM "+
+					"INNER JOIN D_Customer as cus "+
+						"on opp.IDCustomer = cus.IDCustomer "+
+					"INNER JOIN Cat_Services as ser "+
+						"on opp.IDService = ser.IDService "+
+					"LEFT JOIN D_Time as timeStart ON opp.IDTimeStart = timeStart.IDTime "+
+					"LEFT JOIN D_Time as timeEnd ON opp.IDTimeEnd = timeEnd.IDTime "+
+					"LEFT JOIN D_Time as timeTentative ON opp.IDTimeTentative = timeTentative.IDTime "+
+					"WHERE sdms.SDMBOEFullName = @UserFullName "+
+		"END");
 		while( resultSet.next() ) {
 			OpportunityModel opportunity = new OpportunityModel();
 			opportunity.setIDUpCrossSelling( resultSet.getInt("IDUpCrossSelling" ));
@@ -56,6 +89,7 @@ public class OpportunityImplementation implements OpportunityData {
 			opportunity.setProbability( resultSet.getFloat("Probability"));
 			opportunity.setDescription( resultSet.getString("Description"));
 			opportunity.setType( resultSet.getString("Type"));
+			opportunity.setSDMName( resultSet.getString("SDMName"));
 			opportunities.add(opportunity);
 		}
 		resultSet.close();
@@ -110,6 +144,7 @@ public class OpportunityImplementation implements OpportunityData {
 			opportunity.setProbability( resultSet.getFloat( "Probability" ));
 			opportunity.setDescription( resultSet.getString( "Description" ));
 			opportunity.setType( resultSet.getString( "Type" ));
+			opportunity.setIDSDM( resultSet.getInt( "IDSDM" ));
 		}
 		resultSet.close();
 		preparedStatement.close();
@@ -118,7 +153,7 @@ public class OpportunityImplementation implements OpportunityData {
 	@Override
 	public void createOpportunity(OpportunityModel opportunity) throws SQLException {
 		String query = "INSERT INTO Oportunity (IDCustomer, IDService, Cost, Probability,"+ 
-				"Description, IDTimeStart, IDTimeEnd, IDTimeTentative, Type ) values (?,?,?,?,?,?,?,?,?)";
+				"Description, IDTimeStart, IDTimeEnd, IDTimeTentative, Type, IDSDM ) values (?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement preparedStatement = conn.prepareStatement( query );
 		preparedStatement.setInt( 1, opportunity.getIDCustomer());
 		preparedStatement.setInt( 2, opportunity.getIDService() );
@@ -129,6 +164,7 @@ public class OpportunityImplementation implements OpportunityData {
 		preparedStatement.setObject( 7, (opportunity.getIDTimeEnd() != 0) ? opportunity.getIDTimeEnd() : null);
 		preparedStatement.setInt( 8, opportunity.getIDTimeTentative());
 		preparedStatement.setString( 9, opportunity.getType());
+		preparedStatement.setInt( 10, opportunity.getIDSDM());
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
 	}
@@ -165,7 +201,7 @@ public class OpportunityImplementation implements OpportunityData {
 	@Override
 	public void updateOpportunity( OpportunityModel opportunity ) throws SQLException {
 			String query = "UPDATE Oportunity SET Description=?, Cost=?, IDService=?,IDCustomer=?, "+
-					"IDTimeTentative=?, IDTimeStart=?, IDTimeEnd=?, Probability=?, Type=? "+
+					"IDTimeTentative=?, IDTimeStart=?, IDTimeEnd=?, Probability=?, Type=? , IDSDM = ? "+
 					"WHERE IDUpCrossSelling=?";
 			PreparedStatement preparedStatement = conn.prepareStatement( query );
 			preparedStatement.setString( 1, opportunity.getDescription());
@@ -177,7 +213,8 @@ public class OpportunityImplementation implements OpportunityData {
 			preparedStatement.setObject( 7, (opportunity.getIDTimeEnd() != 0) ? opportunity.getIDTimeEnd() : null);
 			preparedStatement.setFloat( 8, opportunity.getProbability());
 			preparedStatement.setString( 9, opportunity.getType());
-			preparedStatement.setInt( 10, opportunity.getIDUpCrossSelling());
+			preparedStatement.setInt( 10, opportunity.getIDSDM());
+			preparedStatement.setInt( 11, opportunity.getIDUpCrossSelling());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 	}

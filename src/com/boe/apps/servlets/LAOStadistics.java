@@ -1,6 +1,8 @@
 package com.boe.apps.servlets;
 
 import java.io.*;
+import java.util.Calendar;
+import java.util.Timer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.*;
 import com.boe.apps.data.LAOData;
 import com.boe.apps.data.LAOImplementation;
 import com.boe.apps.models.LAOModel;
+import com.boe.apps.util.SchedulerTask;
 
 import flexjson.JSONSerializer;
 
@@ -32,6 +35,7 @@ public class LAOStadistics extends HttpServlet {
 		try{
 			if(action.equalsIgnoreCase("list_lao"))
 			{
+		    	obj.changeStatus();
 				response.setContentType("application/json");
 			    try {
 
@@ -87,7 +91,6 @@ public class LAOStadistics extends HttpServlet {
 	{
 		try
 		{
-
 			LAOModel lao = new LAOModel();
 			request.setCharacterEncoding("UTF-8");
 			lao.setIDCustomer(Integer.parseInt(request.getParameter("selectcustomer")));
@@ -128,5 +131,22 @@ public class LAOStadistics extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
 			response.flushBuffer();
 		}
+	}
+	public void runTask(){
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.set(
+	           Calendar.DAY_OF_WEEK,
+	           Calendar.MONDAY
+	        );
+	        calendar.set(Calendar.HOUR_OF_DAY, 9);
+	        calendar.set(Calendar.MINUTE, 0);
+	        calendar.set(Calendar.SECOND, 0);
+	        calendar.set(Calendar.MILLISECOND, 0);
+	        Timer time = new Timer(); 
+	        // Instantiate Timer Object
+
+	        // Start running the task on Monday at 15:40:00, period is set to 8 hours
+	        // if you want to run the task immediately, set the 2nd parameter to 0
+	        time.schedule(new SchedulerTask(), calendar.getTime(), 1000 * 60 * 60 * 8);
 	}
 }

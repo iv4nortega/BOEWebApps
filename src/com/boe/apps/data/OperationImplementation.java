@@ -76,10 +76,10 @@ public class OperationImplementation implements OperationData {
 		List<OperationModel> list_oper = new ArrayList<OperationModel>();
 		String query = "SELECT DISTINCT ProcessName "+
 				  " FROM F_Operation_TOP "+
-				  " WHERE IDSDM = ? "+
+				  //" WHERE IDSDM = ? "+
 				  " ORDER BY ProcessName ASC ";
 		PreparedStatement statement = conn.prepareStatement(query);
-		statement.setInt( 1, idSDM);
+		//statement.setInt( 1, idSDM);
 		ResultSet resultSet = statement.executeQuery();
 		while(resultSet.next()){
 			OperationModel op = new OperationModel();

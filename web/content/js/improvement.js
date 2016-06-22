@@ -100,7 +100,7 @@ Improvement.App = (function ($, window, document, undefined) {
 	   	            	   text: item.customerName
 	   	               }, '<option/>'));
 	   	           });
-	   	        $("#improvement_customer").prepend("<option value=''></option>").val('');
+	   	        //$("#improvement_customer").prepend("<option value=''></option>").val('');
 	   	        $('#improvement_table_wrapper').find('input[type="search"]').val('');
 	   	        if(listcustomers.val() == null){
 	   	        	$('#new_value').css('display', 'none');
@@ -116,7 +116,7 @@ Improvement.App = (function ($, window, document, undefined) {
     	$.ajax({ type: "GET",   
  	       url: "../SDMs.do?action=list_sdms&BOEUserName=" + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
- 	    	   if(data.SDMProfile != 'VIP' || data.IDSDM == 0){
+ 	    	   if(data == null || data.IDSDM == 0){
   	    		  $('.loader').show();
  	    		  $.notify("El usuario con el que ingreso no se encuentra dado de alta.", "warn");
     		   }else{
@@ -148,7 +148,7 @@ Improvement.App = (function ($, window, document, undefined) {
  	                    text: item.text
  	                }, '<option/>'));
  	            });
- 	           $("#improvement_select").prepend("<option value=''></option>").val('');
+ 	           //$("#improvement_select").prepend("<option value=''></option>").val('');
  	       },
          error: function(error){
          	$.notify('No se pudo obtener el listado de clientes.', 'error');

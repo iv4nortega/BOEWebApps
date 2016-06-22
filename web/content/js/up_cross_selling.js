@@ -8,40 +8,13 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	/*Var options for notifications plugin*/
 	var delIdRecord = null,
 	comment_id = null, 
-	opportunity_id = null, options = {
-		  /* Whether to hide the notification on click*/
-		  clickToHide: true,
-		  /* Whether to auto-hide the notification*/
-		  autoHide: true,
-		  /* If autoHide, hide after milliseconds*/
-		  autoHideDelay: 8000,
-		  /* Show the arrow pointing at the element*/
-		  arrowShow: true,
-		  /* Arrow size in pixels*/
-		  arrowSize: 9,
-		  /* Position defines the notification position though uses the defaults below*/
-		  position: 'bottom',
-		  /* Default positions*/
-		  elementPosition: 'bottom left',
-		  globalPosition: 'top right',
-		  /* Default style*/
-		  style: 'bootstrap',
-		  /* Show animation*/
-		  showAnimation: 'slideDown',
-		  /* Show animation duration*/
-		  showDuration: 100,
-		  /* Hide animation*/
-		  hideAnimation: 'slideUp',
-		  /* Hide animation duration*/
-		  hideDuration: 200,
-		  /* Padding between element and notification*/
-		  gap: 2
-	};
+	opportunity_id = null;
 	/*Function that initialize application */
 	var Init = function()
 	{
 		var frame = top.document.getElementsByName('servletBridgeIframe');
     	$(frame).contents().find('.newWindowIcon').hide();
+    	BOEWebApp.GetIDSDMS('#idsdm', '#sdmProfile');
 		$(document).ajaxStart(function() {
 		    $(".loader").show();
 		}).ajaxStop(function() {
@@ -90,7 +63,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		     error: function(jqXHR, textStatus, errorThrown){
 		    	 	comment_id = null;
 		       		opportunity_id = null;
-		     		$.notify("Hubo un problema al eliminar el comentario.", "error", options);
+		     		$.notify("Hubo un problema al eliminar el comentario.", "error");
 		     }
 			});
 		  /*hide notification*/
@@ -123,7 +96,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	  	});
 	  	/*Initialize datatables plugin opportunity ajax*/
 	  	var table = $('#opportunitiesTable').DataTable({
-		  		ajax: "../Opportunities?action=list_opportunities",
+		  		ajax: "../Opportunities?action=list_opportunities&BOEUser=" + BOEWebApp.GetBOEUserName(),
 		        columns: [
 		            {
 		                className:      'details-control',
@@ -236,33 +209,40 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	  	});
 	  	/*Get list of customers for
 	  	 *  select/combobox of modal create opportunity*/
-		GetCustomerList();
+	  	BOEWebApp.GetCustomerListBySDM('#new_record_customer');
+        //Carga los servicios
+    	GetServiceList();
 	};
 	/*Create detail information of opportunity table*/
 	function format (data) {
+		var profileuser = $('#sdmProfile').val();
+		var userregister = (profileuser == 'VIP') ? '<td colspan="3"><b> Registrado por:</b> ' + data.SDMName +  '</td>': '';
 	      return '<div class="details-container">'+
-	          '<table cellpadding="5" cellspacing="0" border="0" class="details-table">'+
-		          '<tr>'+
+	          '<table cellpadding="5" cellspacing="0" border="0" class="details-table">' +
+	        	'<tr>' +
+	          		 userregister  +
+	          	'</tr>' +
+	          	'<tr>'+
 			          '<td class="title">Fecha tentativa:</td>'+
 		              '<td>'+ ((data.timeTentative == null) ? '-': data.timeTentative) +'</td>'+
 	                  '<td class="title">Fecha inicial:</td>'+
 	                  '<td>'+ ((data.timeStart== null) ? '-' : data.timeStart) +'</td>'+
 	                  '<td class="title">Fecha final:</td>'+
 		              '<td>'+ ((data.timeEnd== null) ? '-' : data.timeEnd) +'</td>'+
-	              '</tr>'+
-	              '<tr>'+
+	            '</tr>'+
+	            '<tr>'+
 	              	'<td class="title" >Descripción:</td>'+
 	              	'<td colspan="5">'+ data.description +'</td>'+
 	              '</tr>'+
-	              '<tr>'+
+	            '<tr>'+
 	              /* Table of comments */
-	              	'<td colspan="3">'+
+	            	'<td colspan="3">'+
 			  			'<p class="title-comments"><i class="fa fa-comments"></i> Comentarios</p> '+
 			  			'<a href="#" id="create_comment" onclick="$(\'#div_text_comment\').show();$(\'#text_comment\').focus();"><i class="fa fa-plus"> Agregar comentario</i></a>'+
 			  			'<div id="div_text_comment"><textarea id="text_comment" name="text_comment" class="textarea-50" placeholder="Ingresa tu comentario"></textarea>'+
 			  			'<a href="#" id="saveComment" onclick="UpCrossSelling.App.CreateComment('+ data.IDUpCrossSelling +',\''+ data.type +'\')"><i class="fa fa-save"> Guardar</i></a></div>'+
 			  		'</td>'+
-			  	  '</tr>'+
+			  	'</tr>'+
 	          '</table>'+
 	        '</div>';
 	};
@@ -289,41 +269,12 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	    	   $('#modal_new_record').find('#new_record_date_end').val(data.IDTimeEnd).mouseover();
 	    	   $('#modal_new_record').find('#new_record_description').val(data.description);
 	    	   $('#modal_new_record').find('#new_record_type_sale').val(data.type);
+	    	   $('#modal_new_record').find('#idsdm').val(data.IDSDM);
 	       },
 	       error: function(error){
-	    	   $.notify("Error al obtener el ID.", "error", options);
+	    	   $.notify("Error al obtener el ID.", "error");
 	       }
 	    });
-	};
-	/* Get customer list for combobox*/
-	function GetCustomerList()
-	{
-		$.ajax({ type: "GET",   
-		       url: "../Customers.do?action=list_customers",   
-		       success : function(data){
-		    	   /*if data is not null show customer list in select customers*/
-		    	   if(data != null){
-			    	   var listcustomers = $('#new_record_customer');
-			    	   listcustomers.find('option').remove().end();
-			            $.each(data, function (index, item) {
-			            	listcustomers.append(
-			                $('<option>', {
-			                    value: item.customerId,
-			                    text: item.customerName
-			                }, '<option/>'));
-			            });
-			            listcustomers.val(listcustomers);
-			            //Carga los servicios
-			        	GetServiceList();
-	    		   }
-		    	   else
-	    		   $.notify("Ocurrio un error al obtener los clientes", "error", options);
-		       },
-	        error: function(error){
-	        	console.log(error.statusText);
-	        	$.notify(error.statusText, "error", options);
-	        }
-		});
 	};
 	/*Get customer list ajax*/
 	function GetServiceList()
@@ -345,10 +296,10 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 			            listservices.val(listservices);
 	    		   }
 		    	   else
-		    	$.notify("Ocurrio un error al obtener la lista de servicios", "error", options);
+		    	$.notify("Ocurrio un error al obtener la lista de servicios", "error");
 		       },
 	        error: function(error){
-	        	$.notify(error.statusText, "error", options);
+	        	$.notify(error.statusText, "error");
 	        }
 		});
 	};
@@ -361,7 +312,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		    	   DrawComments(data)
 		       },
 	        error: function(error){
-	        	$.notify("No se pudieron obtener las notas.", "error", options);
+	        	$.notify("No se pudieron obtener las notas.", "error");
 	        }
 		});
 	};
@@ -404,14 +355,14 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		       		$('#text_comment').val('');
 		       	},
 		     error: function(jqXHR, textStatus, errorThrown){
-		     	$.notify("Hubo un problema al guardar el comentario.", "warn", options);
+		     	$.notify("Hubo un problema al guardar el comentario.", "warn");
 		     	$('#div_text_comment').hide();
 		     	$('#text_comment').val('');
 		     }
 			});
 		}
 		else
-			$('#text_comment').notify("Es necesario el texto del comentario.", "error", options);
+			$('#text_comment').notify("Es necesario el texto del comentario.", "error");
 	};
 	var DeleteComment = function(id_comment, id_opportunity )
 	{

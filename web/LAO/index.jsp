@@ -16,7 +16,6 @@
          <tr>
          	<th></th>
              <th>No.</th>
-             <th>SDM</th>
              <th>Cliente</th>
              <th>Fecha planeada solución</th>
              <th>Fecha real solución</th>
@@ -31,7 +30,6 @@
          <tr>
          	<th></th>
              <th>No.</th>
-             <th>SDM</th>
              <th>Cliente</th>
              <th>Fecha planeada solución</th>
              <th>Fecha real solución</th>

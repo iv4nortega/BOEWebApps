@@ -17,9 +17,10 @@ lao.app = (function ($, window, document, undefined) {
     var InitializeApplication = function () 
     {
     	/*OBTIENE EL LISTADO DE CLIENTES MEDIANTE AJAX*/
-    	GetCustomerList();
+    	BOEWebApp.GetCustomerListBySDM('#selectcustomer');
     	var bridgeframe = top.document.getElementsByName('servletBridgeIframe');
     	$(bridgeframe).contents().find('.newWindowIcon').hide();
+    	BOEWebApp.GetIDSDMS('#lao_idSDM', '#sdmProfile');
     	$(document).ajaxStart(function() {
 		    $(".loader").show();
 		}).ajaxStop(function() {
@@ -60,7 +61,7 @@ lao.app = (function ($, window, document, undefined) {
 		     error: function(jqXHR, textStatus, errorThrown){
 		    	 	comment_id = null;
 		       		idlao = null;
-		     		$.notify("Hubo un problema al eliminar el comentario.", "error", options);
+		     		$.notify("Hubo un problema al eliminar el comentario.", "error");
 		     }
 			});
 		  /*hide notification*/
@@ -93,9 +94,9 @@ lao.app = (function ($, window, document, undefined) {
     		mask: 'y-m-d'
     	});
         /*INIT DATEPICKER*/
-        BOEWebApp.DatePickerGral('#form_create_lao', '#date_planned');
-        BOEWebApp.DatePickerGral('#form_create_lao', '#date_real');
-        BOEWebApp.DatePickerGral('#form_create_lao', '#date_close');
+        BOEWebApp.DatePickerLAO('#form_create_lao', '#date_planned', '#selectstatus');
+        BOEWebApp.DatePickerLAO('#form_create_lao', '#date_real', '#selectstatus');
+        BOEWebApp.DatePickerLAO('#form_create_lao', '#date_close', '#selectstatus');
     	/*OBTIENE LA LISTA DE ACTIVIDADES*/
     	var table = $('#lao_table').DataTable({
     		select: true, 
@@ -135,7 +136,6 @@ lao.app = (function ($, window, document, undefined) {
 	                width: "3%"
 	            },
     	        { data: "IDLAO", width: "5%", visible: false},
-    	        { data: "SDMShortName", width: "17%" },
     	        { data: "customerName",width: "10%" },
     	        { data: "plannedDate", width: "10%"},
     	        { data: "realDate", width: "10%" },
@@ -158,28 +158,28 @@ lao.app = (function ($, window, document, undefined) {
     	    ],
     	    createdRow: function(row, data, index){
     	    	if(data.status == "1"){
-            		$('td', row).eq(7).addClass('defeated_status');
-            		$('td', row).eq(7).text("Vencido");
+            		$('td', row).eq(6).addClass('defeated_status');
+            		$('td', row).eq(6).text("Vencido");
                     return data;
         		}
     	    	if(data.status == "2"){
-            		$('td', row).eq(7).addClass('reopen_status');
-            		$('td', row).eq(7).text("Reabierto");
+            		$('td', row).eq(6).addClass('reopen_status');
+            		$('td', row).eq(6).text("Reabierto");
                     return data;
         		}
     	    	if(data.status == "3"){
-            		$('td', row).eq(7).addClass('inprogress_status');
-            		$('td', row).eq(7).text("En progreso");
+            		$('td', row).eq(6).addClass('inprogress_status');
+            		$('td', row).eq(6).text("En progreso");
                     return data;
         		}
     	    	if(data.status == "4"){
-            		$('td', row).eq(7).addClass('solved_status');
-            		$('td', row).eq(7).text("Solucionado");
+            		$('td', row).eq(6).addClass('solved_status');
+            		$('td', row).eq(6).text("Solucionado");
                     return data;
         		}
     	    	if(data.status == "5"){
-            		$('td', row).eq(7).addClass('close_status');
-            		$('td', row).eq(7).text("Cerrado");
+            		$('td', row).eq(6).addClass('close_status');
+            		$('td', row).eq(6).text("Cerrado");
                     return data;
         		}
     	    }
@@ -215,7 +215,7 @@ lao.app = (function ($, window, document, undefined) {
 	     	$('#laoModal').find('#subject').val(tableData.subject);
 	     	$('#laoModal').find('#comments').val(tableData.comments);
 	     	$('#laoModal').find('#selectstatus').val(tableData.status);
-	     	
+	     	$('#laoModal').find('#lao_idSDM').val(tableData.IDSDM);
     		ChangeStatusDefault(tableData.status);
     	} );
     	/* Validate form by jquery validate plugin*/
@@ -245,8 +245,6 @@ lao.app = (function ($, window, document, undefined) {
 				}
 			}
 		});
-    	/*Obtiene un listado de SDMs*/
-    	setTimeout(GetSDMS, 500);
     };
     var DeleteComment = function(id_comment, id_lao )
 	{
@@ -279,37 +277,15 @@ lao.app = (function ($, window, document, undefined) {
 		       		$('#text_comment').val('');
 		       	},
 		     error: function(jqXHR, textStatus, errorThrown){
-		     	$.notify("Hubo un problema al guardar el comentario.", "warn", options);
+		     	$.notify("Hubo un problema al guardar el comentario.", "warn");
 		     	$('#div_text_comment').hide();
 		     	$('#text_comment').val('');
 		     }
 			});
 		}
 		else
-			$('#text_comment').notify("Es necesario el texto del comentario.", "error", options);
+			$('#text_comment').notify("Es necesario el texto del comentario.", "error");
 	};
-    /*GET CUSTOMER LIST*/
-    function GetCustomerList()
-    {
-    	$.ajax({ type: "GET",   
-    	       url: "../Customers.do?action=list_customers",   
-    	       success : function(data){
-    	    	   var listcustomers = $('#selectcustomer');
-    	    	   listcustomers.find('option').remove().end();
-    	            $.each(data, function (index, item) {
-    	            	listcustomers.append(
-    	                $('<option>', {
-    	                    value: item.customerId,
-    	                    text: item.customerName
-    	                }, '<option/>'));
-    	            });
-    	            listcustomers.val(listcustomers);
-    	       },
-            error: function(error){
-            	$.notify("No se pudo obtener el listado de clientes.", "error");
-            }
-    	});
-    };
     /*Get comments */
 	function GetComments(idParentItem)
 	{
@@ -319,7 +295,7 @@ lao.app = (function ($, window, document, undefined) {
 		    	   DrawComments(data)
 		       },
 	        error: function(error){
-	        	$.notify("No se pudieron obtener las notas.", "error", options);
+	        	$.notify("No se pudieron obtener las notas.", "error");
 	        }
 		});
 	};
@@ -341,25 +317,14 @@ lao.app = (function ($, window, document, undefined) {
 		    ).appendTo('#records_table');
 		});
 	};
-    function GetSDMS()
-    {
-    	$.ajax({ type: "GET",   
- 	       url: "../LAOStadistics.do?action=list_sdms&UserLogin=" + BOEWebApp.GetBOEUserName(),   
- 	       success : function(data){
- 	    	   $('#lao_idSDM').val(data.IDSDM);
- 	    	   if(data.SDMProfile != 'VIP'){
- 	    		  $('#lao_table td:nth-child(2)').hide();
- 	    		  $('#lao_table th:nth-child(2)').hide();
-    		   }
- 	       },
-         error: function(error){
-         	$.notify("No se pudieron obtener las notas.", "error");
-         }
- 	});
-    }
 	function format (data) {
+		var profileuser = $('#sdmProfile').val();
+		var userregister = (profileuser == 'VIP') ? '<td colspan="3"><b> Registrado por:</b> ' + data.SDMShortName +  '</td>': '';
 	      return '<div class="details-container">'+
-	          '<table cellpadding="5" cellspacing="0" border="0" class="details-table">'+
+	          '<table cellpadding="5" cellspacing="0" border="0" class="details-table">' +
+	          	  '<tr>' +
+	          		 userregister  +
+	          		 '</tr>' +
 		          '<tr>'+
 	                  '<td class="title">Fecha:</td>'+
 	                  '<td>'+ ((data.detectionDate == null) ? '-' : data.detectionDate) +'</td>'+
@@ -380,47 +345,7 @@ lao.app = (function ($, window, document, undefined) {
 	          '</table>'+
 	        '</div>';
 	};
-	/*GENERAL DATEPICKER OPTIONS*/
-	function DatePickerGral(inputctrl)
-	{
-		$(inputctrl).datepicker({ 
-			dateFormat: 'yy-mm-dd',
-			autoclose: true,
-			language: 'es',
-			showAnim: 'slideDown',
-		}).on('change', function(e){
-			var validator = $( "#form_create_lao" ).validate();
-			validator.element( inputctrl );
-			
-			plannedDate = $('#date_planned').val().split('-');
-			realDate = $('#date_real').val().split('-');
-			closeDate = $('#date_close').val().split('-');
-		    datenow = $('#lao_date').val().split('-');
-		    if (new Date(plannedDate[0], plannedDate[1], plannedDate[2]) <
-		    new Date(datenow[0], datenow[1], datenow[2])) {
-		    	$('#selectstatus').val(1);
-		    	$('#selectstatus').css('background-color', '#e20074');
-		    	$('#selectstatus').css('color', '#fff');
-		    }
-		    if (new Date(plannedDate[0], plannedDate[1], plannedDate[2]) >=
-				    new Date(datenow[0], datenow[1], datenow[2]))
-	    	{
-		    	$('#selectstatus').val(3);
-		    	$('#selectstatus').css('background-color', '#66ccff');
-		    	$('#selectstatus').css('color', '#fff');
-	    	}if(new Date(realDate[0], realDate[1], realDate[2]) <
-	    		    new Date(datenow[0], datenow[1], datenow[2])){
-	    		$('#selectstatus').val(4);
-		    	$('#selectstatus').css('background-color', '#4CAF50');
-		    	$('#selectstatus').css('color', '#fff');
-    		}if(new Date(closeDate[0], closeDate[1], closeDate[2]) <
-	    		    new Date(datenow[0], datenow[1], datenow[2])){
-	    		$('#selectstatus').val(5);
-		    	$('#selectstatus').css('background-color', '#000');
-		    	$('#selectstatus').css('color', '#fff');
-    		}
-		});
-	}
+	
 	function ChangeStatusDefault(status){
 		var select_status = $('#selectstatus');
     	if(status == 1){
@@ -457,6 +382,7 @@ lao.app = (function ($, window, document, undefined) {
 		     	$('#laoModal').find('#subject').val(data.subject);
 		     	$('#laoModal').find('#comments').val(data.comments);
 		     	$('#laoModal').find('#selectstatus').val(data.status);
+		     	$('#laoModal').find('#lao_idSDM').val(data.IDSDM);
 	   			ChangeStatusDefault(data.status);
 	       },
 	       error: function(error){

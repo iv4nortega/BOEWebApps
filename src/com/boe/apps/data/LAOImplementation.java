@@ -4,13 +4,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import java.sql.PreparedStatement;
 
 import com.boe.apps.models.*;
 import com.boe.apps.util.DBUtil;
+import com.boe.apps.util.ListItem;
 
 
 public class LAOImplementation implements LAOData {
@@ -28,41 +31,43 @@ public class LAOImplementation implements LAOData {
 		List<LAOModel> laomodel = new ArrayList<LAOModel>();
 		try {
 			Statement statement = DBUtil.VerifyConnection(conn);
-			ResultSet resultSet = statement.executeQuery("EXEC dbo.sp_getLAO "
-					+ "@BOEUser = '"+ userLogin + "', @BOEProfile = null;");
-//			ResultSet resultSet = statement.executeQuery("SET @BOEProfile = (SELECT SDMProfile "+
-//			"FROM    D_SDMs "+
-//			"WHERE   SDMBOEFullName = '"+ userLogin + "') IF  @BOEProfile = 'VIP' "+
-//			      "SELECT lao.*, Customer.CName as CustomerName, "+
-//			        "DetectionTime.[Date] as DetectionDate, "+
-//			        "PlannedTime.[Date] as PlannedDate, "+
-//			        "RealTime.[Date] as RealDate, "+
-//			        "CloseTime.[Date] as CloseDate,  "+
-//			        "SDMs.SDMUserName as SDMUser, "+
-//			        "SDMs.SDMShortName as SDMName "+
-//			      "FROM LAO as lao "+
-//			        "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer "+ 
-//			        "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM "+
-//			          "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime "+ 
-//			          "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime "+
-//			          "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime "+
-//			          "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime "+
-//			"ELSE "+
-//			      "SELECT lao.*, Customer.CName as CustomerName, "+
-//			        "DetectionTime.[Date] as DetectionDate, "+
-//			        "PlannedTime.[Date] as PlannedDate, "+
-//			        "RealTime.[Date] as RealDate, "+
-//			        "CloseTime.[Date] as CloseDate, "+
-//			        "SDMs.SDMUserName as SDMUser, "+
-//			        "SDMs.SDMShortName as SDMName "+
-//			      "FROM LAO as lao "+
-//			        "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer "+ 
-//			        "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM "+
-//			          "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime "+ 
-//			          "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime "+
-//			          "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime "+
-//			          "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime "+
-//			      "where SDMs.SDMBOEFullName ='"+ userLogin + "' GO");
+			ResultSet resultSet = statement.executeQuery("DECLARE @BOEUser varchar(250) " +
+			"SET @BOEUser = '"+ userLogin + "' " +
+			"DECLARE @BOEProfile varchar(250) " +
+			"SELECT  @BOEProfile = SDMProfile " +
+			"FROM    D_SDMs " +
+				"WHERE   SDMBOEFullName = @BOEUser " +
+			"IF  @BOEProfile = 'VIP' " + 
+			      "SELECT lao.*, Customer.CName as CustomerName, " +
+			        "DetectionTime.[Date] as DetectionDate, " +
+			        "PlannedTime.[Date] as PlannedDate, " +
+			        "RealTime.[Date] as RealDate, " +
+			        "CloseTime.[Date] as CloseDate, " +
+			        "SDMs.SDMUserName as SDMUser, " +
+			        "SDMs.SDMShortName as SDMName " +
+			      "FROM LAO as lao " +
+			        "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer " + 
+			        "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM " +
+			          "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime " + 
+			          "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime " +
+			          "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime " +
+			          "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime " +
+			"ELSE " +
+			      "SELECT lao.*, Customer.CName as CustomerName, " +
+			        "DetectionTime.[Date] as DetectionDate, " +
+			        "PlannedTime.[Date] as PlannedDate, " +
+			        "RealTime.[Date] as RealDate, " +
+			        "CloseTime.[Date] as CloseDate, " +
+			        "SDMs.SDMUserName as SDMUser, " +
+			        "SDMs.SDMShortName as SDMName " +
+			      "FROM LAO as lao " +
+			        "INNER JOIN D_Customer as Customer ON lao.IDCustomer = Customer.IDCustomer " + 
+			        "INNER JOIN D_SDMs as SDMs ON lao.IDSDM = SDMs.IDSDM " +
+			          "LEFT JOIN D_Time as DetectionTime ON lao.IDDetectionTime = DetectionTime.IDTime " + 
+			          "LEFT JOIN D_Time as PlannedTime ON lao.IDPlannedTime = PlannedTime.IDTime " +
+			          "LEFT JOIN D_Time as RealTime ON lao.IDRealTime = RealTime.IDTime " +
+			          "LEFT JOIN D_Time as CloseTime ON lao.IDCloseTime = CloseTime.IDTime " +
+			      "where SDMs.SDMBOEFullName = @BOEUser");
 			while( resultSet.next() ) {
 				LAOModel lao = new LAOModel();
 				lao.setIDLAO( resultSet.getInt("IDLAO" ));
@@ -206,5 +211,41 @@ public class LAOImplementation implements LAOData {
 		resultSet.close();
 		statement.close();
 		return user;
+	}
+	@Override
+	public void changeStatus() throws SQLException{
+		Statement statement = DBUtil.VerifyConnection(conn);
+		ResultSet resultSet = statement.executeQuery("SELECT IDPlannedTime, IDLAO FROM LAO");
+		List<ListItem> list = new ArrayList<ListItem>();
+		while( resultSet.next() ) {
+			ListItem lisItem = new ListItem();
+			lisItem.setText( resultSet.getString("IDPlannedTime") );
+			lisItem.setValue( resultSet.getInt("IDLAO" ));
+			list.add(lisItem);
+		}
+		//Obtenemos la fecha actual
+		SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd");
+	    Date now = new Date();
+	    String strTime = sdfTime.format(now);
+	    int dateTimeNowToInt = Integer.parseInt(strTime.replace("-", ""));
+	    //recorremos el listado y verificamos si la fecha es antigua
+		for(ListItem laos: list ){
+			//Si la fecha es menor a la actual cambiará el status
+			if(Integer.parseInt(laos.getText()) < dateTimeNowToInt ){
+				String updateLao = "UPDATE LAO SET [Status] = 1 WHERE IDLAO = ?";
+				PreparedStatement preparedStatement = conn.prepareStatement( updateLao );
+				preparedStatement.setInt( 1, laos.getValue());
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+//				System.out.println ("La fecha: " + laos.getText() + " es antigua.");
+			}
+//			else{
+//				System.out.println ("La fecha: " + laos.getText() + " es actual con el Id "+  laos.getValue() ); 
+//			}
+		}
+		
+		resultSet.close();
+		statement.close();
+
 	}
 }

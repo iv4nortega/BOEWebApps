@@ -13,6 +13,7 @@
 			<input style="display:none" type="text" id="lao_id" name="lao_id">
 			<input style="display:none" type="text" id="lao_idSDM" name="lao_idSDM">
 			<input style="display:none" type="text" id="UserLogin" name="UserLogin">
+			<input style="display:none" type="text" id ="sdmProfile" name="sdmProfile">
 			<%
 			   Date dNow = new Date();
 			   SimpleDateFormat ft = 

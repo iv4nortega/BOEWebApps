@@ -8,7 +8,8 @@
       		</div>
            <form class="form-default" id="form_new_record" name="form_new_record" action="../Opportunities.do"  method="post">
            <input style="display:none" type="text" id="new_record_id" name="new_record_id">
-           
+           <input style="display:none" type="text" id ="idsdm" name="idsdm">
+           <input style="display:none" type="text" id ="sdmProfile" name="sdmProfile">
            	<div class="row">
            		<!--Cliente-->
 			  	<div class="large-4 columns">

@@ -47,12 +47,12 @@ public class ImprovementsImplementation implements ImprovementsData {
 	public List<ListItem> getTypeImprovements(String userboe) throws SQLException{
 		List<ListItem> improvements = new ArrayList<ListItem>();
 		String query = "SELECT DISTINCT Type "+
-			  "FROM F_Improvements as improvements "+
-			  "INNER JOIN D_SDMs as sdm "+
-			  "ON sdm.IDSDM = improvements.IDSDM "+
-			  "WHERE sdm.SDMBOEFullName =?";
+			  "FROM F_Improvements as improvements ";
+//			  "INNER JOIN D_SDMs as sdm "+
+//			  "ON sdm.IDSDM = improvements.IDSDM "+
+//			  "WHERE sdm.SDMBOEFullName =?";
 		PreparedStatement preparedStatement = conn.prepareStatement(query);
-		preparedStatement.setString(1, userboe);
+//		preparedStatement.setString(1, userboe);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while( resultSet.next() ) {
 			ListItem improvement = new ListItem();
