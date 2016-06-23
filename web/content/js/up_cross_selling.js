@@ -15,7 +15,24 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		var frame = top.document.getElementsByName('servletBridgeIframe');
     	$(frame).contents().find('.newWindowIcon').hide();
     	BOEWebApp.GetIDSDMS('#idsdm', '#sdmProfile');
-		$(document).ajaxStart(function() {
+    	/*Al presionar el boton de nuevo servicio cierra el modal de 
+    	 * nueva oportunidad y muestra el formulario de nuevo servicio
+    	 * */
+    	$('#new_service').on('click', function(){
+    		$('#modal_new_record').css('display','none');
+    		$('#modal_new_service').css('display', 'block');
+    	});
+    	/*Al presionar el boton de cancelar cierra el modal muestra el
+    	 *  formulario de registro de oportunidad
+    	 * */
+		$('#closemodal_service').on('click', function(){
+			var validator = $("#form_new_service").validate();
+			validator.resetForm();
+    		$('#modal_new_service').css('display', 'none');
+			$('#modal_new_record').css('display','block');
+		});
+		
+    	$(document).ajaxStart(function() {
 		    $(".loader").show();
 		}).ajaxStop(function() {
 			$(".loader").hide();
@@ -185,6 +202,52 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 					required: 'Ingrese una descripción.',
 					maxlength: 'El número máximo de carácteres para descripción es {0}.'
 				}
+			}
+		});
+	  	/* Validate form by jquery validate plugin for new service*/
+	  	$('#form_new_service').validate({
+			rules : {
+				name_service: {
+					required: true,
+					maxlength: 50
+				},
+				description_service: {
+					required: true,
+					maxlength: 512
+				}
+			},
+			messages:{
+				name_service: {
+					required: 'Ingrese nombre del servicio.',
+					maxlength: 'Número máximo de caracteres es {0}.'
+				},
+				description_service: {
+					required: 'Ingrese una descripción.',
+					maxlength: 'El número máximo de carácteres para descripción es {0}.'
+				}
+			},
+			submitHandler: function() {
+				var params = {
+					nameservice : $('#name_service').val(),
+		    	    descriptionservice:	$('#description_service').val()
+				}
+				/*Metodo ajax para listar los clientes por sdm*/
+		    	$.ajax({ 
+		    		type: 'POST',   
+		    	    url: '../Services',
+		    	    data: params,
+		    	    success : function(data){
+		        		$('#modal_new_service').css('display', 'none');
+		    	    	$('#modal_new_record').css('display','block');
+		    	    	$('#name_service').val('');
+		    	    	$('#description_service').val('');
+		    	    	GetServiceList();
+		    	    	table.ajax.reload();
+		    	    },
+		            error: function(error){
+		            	$.notify('No se pudo guardar el registro.' , 'error');
+		            }
+		    	});
 			}
 		});
 	  	/*Get details for opportunities

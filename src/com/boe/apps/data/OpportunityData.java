@@ -20,4 +20,5 @@ public interface OpportunityData
 	public OpportunityModel getOpportunityById(int oportunityId) throws SQLException;
 	public List<CustomerModel> getAllCustomers() throws SQLException;
 	public List<ServiceModel> getAllServices() throws SQLException;
+	void createService(ServiceModel service) throws SQLException;
 }

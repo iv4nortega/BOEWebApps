@@ -169,6 +169,15 @@ public class OpportunityImplementation implements OpportunityData {
 		preparedStatement.close();
 	}
 	@Override
+	public void createService(ServiceModel service) throws SQLException {
+		String query = "INSERT INTO Cat_Services ([Name], [Description]) VALUES(?,?)";
+		PreparedStatement preparedStatement = conn.prepareStatement( query );
+		preparedStatement.setString( 1, service.getServiceName());
+		preparedStatement.setString( 2, service.getServiceDescription() );
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
+	}
+	@Override
 	public void addComments(CommentsModel comments) throws SQLException{
 			String query = "INSERT INTO Notes (IDParentItem, ID_TABLE_NAME, Note, Timestamp,"+ 
 					"AddedBy) values (?,?,?,?,?)";
@@ -238,7 +247,7 @@ public class OpportunityImplementation implements OpportunityData {
 	public List<ServiceModel> getAllServices() throws SQLException {
 		List<ServiceModel> services = new ArrayList<ServiceModel>();
 		Statement statement = DBUtil.VerifyConnection(conn);
-		ResultSet resultSet = statement.executeQuery( "SELECT * FROM Cat_Services" );
+		ResultSet resultSet = statement.executeQuery( "SELECT * FROM Cat_Services ORDER BY Name ASC" );
 		while( resultSet.next() ) {
 			ServiceModel service = new ServiceModel();
 			service.setServiceId( resultSet.getInt("IDService") );

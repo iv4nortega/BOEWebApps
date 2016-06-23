@@ -8,6 +8,7 @@ package com.boe.apps.models;
 public class ServiceModel {
 	private int idService;
 	private String serviceName;
+	private String serviceDescription;
 	
 	/*ID del servicio*/
 	public int getServiceId() {
@@ -22,5 +23,12 @@ public class ServiceModel {
 	}
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+	/*Description del servicio*/
+	public String getServiceDescription() {
+		return serviceDescription;
+	}
+	public void setServiceDescription(String description) {
+		this.serviceDescription = description;
 	}
 }

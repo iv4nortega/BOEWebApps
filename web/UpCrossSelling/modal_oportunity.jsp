@@ -12,15 +12,22 @@
            <input style="display:none" type="text" id ="sdmProfile" name="sdmProfile">
            	<div class="row">
            		<!--Cliente-->
-			  	<div class="large-4 columns">
+			  	<div class="large-5 columns">
 				  	<label>Cliente:</label>
 		          	<select id="new_record_customer" name="new_record_customer"></select>
            		</div>
 				<!--Servicio-->
-				<div class="large-8 columns">
-			        <label>Servicio:</label>
-			        <select id="new_record_service" name="new_record_service">
-			        </select>
+				<div class="large-7 columns">
+			        <label>Servicio: </label>
+			        <div class="row collapse prefix-radius">
+			        	<div class="small-1 columns">
+			        		<a href="#" id="new_service"><span class="prefix"><i class="fa fa-plus-circle"></i></span></a>
+			        	</div>
+			        	<div class="small-11 columns">
+					        <select id="new_record_service" name="new_record_service">
+					        </select>
+			        	</div>
+			        </div>
 			  	</div>
 			</div>
            <div class="row">

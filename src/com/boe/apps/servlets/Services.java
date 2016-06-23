@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.boe.apps.data.OpportunityData;
-import com.boe.apps.data.OpportunityImplementation;
+import com.boe.apps.data.*;
+import com.boe.apps.models.*;
 
 import flexjson.JSONSerializer;
 
@@ -45,4 +45,21 @@ public class Services extends HttpServlet{
 			response.flushBuffer();
     	}
     }
+
+	@Override 
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,  IOException
+	{
+		try
+    	{
+			ServiceModel service = new ServiceModel();
+			request.setCharacterEncoding("UTF-8");
+			service.setServiceName(request.getParameter("nameservice"));
+			service.setServiceDescription(request.getParameter("descriptionservice"));
+			det.createService(service);
+    	}
+		catch(Exception ex) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+			response.flushBuffer();
+    	}
+	}
 }

@@ -18,7 +18,7 @@ public class SchedulerTask extends TimerTask {
 			System.out.println("Working...");
 			} 
 		catch (Exception ex) {
-	        System.out.println("error running thread " + ex.getMessage());
+	        System.out.println("Error running thread " + ex.getMessage());
 		}
    }
 }

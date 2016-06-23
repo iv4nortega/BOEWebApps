@@ -31,7 +31,7 @@
 <div class="row">
 <!--Cliente-->
 	<div class="large-6 columns">
-		<label>Mejora:</label>
+		<label>Tipo:</label>
 	    <select class="full-width" id=improvement_select name="improvement_select"></select>
 	</div>
 </div>
@@ -60,12 +60,20 @@
            <form id="form_improvement" name="form_improvement"  >
 	           	<input type="text" style="display:none" id="improvementId" name="improvementId" />
 	           	<input type="text" style="display:none" id="sdmId" name="sdmId" />
-	           	<input type="text" style="display:none" id="customer_selected" name="customer_selected" />
-	           	<input type="text" style="display:none" id="improvement_selected" name="improvement_selected" />
 	           	<input type='text' style='display:none' id='timeId' name='timeId'  />
 	           	<div class="row">
 	           		<h3>Registro de nueva mejora</h3>
 	           	</div>
+	           	<div class="row">
+					<div class="large-6 columns">
+						<label>Cliente:</label>
+	           			<select id="customer_selected" name="customer_selected" ></select>
+					</div>
+					<div class="large-6 columns">
+						<label>Tipo de registro:</label>
+	           			<select id="improvement_selected" name="improvement_selected" ></select>
+					</div>
+				</div>
 				<div class="row">
 					<div class="large-12 columns">
 						<label>Descripción:</label>

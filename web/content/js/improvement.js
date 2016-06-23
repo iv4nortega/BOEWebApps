@@ -23,6 +23,7 @@ Improvement.App = (function ($, window, document, undefined) {
 		 * */
 		/*Obtiene la lista de los periodos*/
 		GetPeriodsForDropDownlist();
+		BOEWebApp.GetCustomerListBySDM('#customer_selected');
 		/*Muestra la animación al realizar un llamado ajax*/
 		$(document).ajaxStart(function() {
 		    $(".loader").show();
@@ -140,13 +141,20 @@ Improvement.App = (function ($, window, document, undefined) {
  	       url: '../Improvements.do?g=typeImprovements&user_boe=' + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
  	    	   var list_improvements = $('#improvement_select');
- 	    	  list_improvements.find('option').remove().end();
+ 	    	   var list_improvements_modal = $('#improvement_selected');
+ 	    	   list_improvements.find('option').remove().end();
+ 	    	   list_improvements_modal.find('option').remove().end();
  	            $.each(data, function (index, item) {
  	            	list_improvements.append(
  	                $('<option>', {
  	                    value: item.text,
  	                    text: item.text
  	                }, '<option/>'));
+ 	            	list_improvements_modal.append(
+	                $('<option>', {
+	                    value: item.text,
+	                    text: item.text
+	                }, '<option/>'));
  	            });
  	           //$("#improvement_select").prepend("<option value=''></option>").val('');
  	       },

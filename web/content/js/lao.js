@@ -205,18 +205,20 @@ lao.app = (function ($, window, document, undefined) {
     	});
     	$('#lao_table tbody').on( 'dblclick', 'tr', function () {
     		var tableData = table.row(this).data();
-		    $('#laoModal').css('display', 'block');
-		 	$('#laoModal').find('#lao_id').val(tableData.IDLAO);
-		 	//$('#laoModal').find('#lao_date').val(tableData.detectionDate);
-		 	$('#laoModal').find('#selectcustomer').val(tableData.IDCustomer);
-	     	$('#laoModal').find('#date_planned').val(tableData.plannedDate).mouseover();
-	     	$('#laoModal').find('#date_real').val(tableData.realDate).mouseover();
-	     	$('#laoModal').find('#date_close').val(tableData.closeDate).mouseover();
-	     	$('#laoModal').find('#subject').val(tableData.subject);
-	     	$('#laoModal').find('#comments').val(tableData.comments);
-	     	$('#laoModal').find('#selectstatus').val(tableData.status);
-	     	$('#laoModal').find('#lao_idSDM').val(tableData.IDSDM);
-    		ChangeStatusDefault(tableData.status);
+    		if(tableData != undefined){
+			    $('#laoModal').css('display', 'block');
+			 	$('#laoModal').find('#lao_id').val(tableData.IDLAO);
+			 	//$('#laoModal').find('#lao_date').val(tableData.detectionDate);
+			 	$('#laoModal').find('#selectcustomer').val(tableData.IDCustomer);
+		     	$('#laoModal').find('#date_planned').val(tableData.plannedDate).mouseover();
+		     	$('#laoModal').find('#date_real').val(tableData.realDate).mouseover();
+		     	$('#laoModal').find('#date_close').val(tableData.closeDate).mouseover();
+		     	$('#laoModal').find('#subject').val(tableData.subject);
+		     	$('#laoModal').find('#comments').val(tableData.comments);
+		     	$('#laoModal').find('#selectstatus').val(tableData.status);
+		     	$('#laoModal').find('#lao_idSDM').val(tableData.IDSDM);
+	    		ChangeStatusDefault(tableData.status);
+    		}
     	} );
     	/* Validate form by jquery validate plugin*/
 	  	$('#form_create_lao').validate({
@@ -226,7 +228,7 @@ lao.app = (function ($, window, document, undefined) {
 				},
 				subject: {
 					required: true,
-					maxlength: 512
+					maxlength: 150
 				},
 				comments: {
 					required: true,

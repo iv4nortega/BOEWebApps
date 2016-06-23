@@ -36,6 +36,7 @@
         </tfoot>
     </table>
 	<jsp:include page="modal_oportunity.jsp"/>
+	<jsp:include page="modal_create_service.jsp"/>
 	<jsp:include page="modal_delete.jsp"/>
 </body>
 <script>
