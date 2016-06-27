@@ -97,6 +97,10 @@ span.postfix, label.postfix {
     border: 1px solid #93B2D0;
     width: 350px;
 }
+/* Modal Content */
+.modalapp-large {
+    width: 560px;
+}
 /* Modal Header */
 .modalapp-header {
     padding: 0.5em;

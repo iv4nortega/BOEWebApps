@@ -60,31 +60,12 @@
         </tr>
     </tfoot>
 </table>
- <div class="modalapp" id="modal_add_value">
-      <div class="modalapp-content">
-           <span class="closemodal">x</span>
-           <form id="form_operation_top" name="form_operation_top" class="form-default"  >
-	           	<input type="text" style="display:none" id="operationId" name="operationId" />
-	           	<input type="text" style="display:none" id="sdmId" name="sdmId" />
-	           	<input type="text" style="display:none" id="selectcustomer" name="selectcustomer" />
-	           	<input type="text" style="display:none" id="processName" name="processName" />
-	           	<input type='text' style='display:none' id='timeId' name='timeId'  />
-	           	<div class="row">
-	           		<h4>Top 10 del <span id="previousperiod"></span></h4>
-	           	</div>
-				<div class="row">
-					<div class="previus_registers">
-					<!-- Aqui se incrustan los 10 registros -->
-					</div>
-				</div>
-				<div class="row"><div class="large-12 columns"><button id="save_operation_top">Guardar</button></div></div>
-			</form>
-      </div>
-    </div>
+<jsp:include page="modal_update_value.html"/>
+<jsp:include page="modal_create_values.html"/>
+</body>
 <script>
 $(function() {
 	SDM.App.Init();
 });
 </script>
-</body>
 </html>

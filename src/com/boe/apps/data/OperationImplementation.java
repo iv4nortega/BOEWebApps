@@ -19,19 +19,49 @@ public class OperationImplementation implements OperationData {
 		conn = DBUtil.getConnection();
 	}
 	@Override
-	public List<OperationModel> getAllOperations(int idSDM) throws SQLException{
+	public List<OperationModel> getAllOperations(String sdmName, int timeId, String processName, int customerId) throws SQLException{
 		List<OperationModel> operations = new ArrayList<OperationModel>();
-		String query = "SELECT OperationTops.*, SDMs.SDMShortName, customer.CName "+
-				"FROM F_Operation_TOP  as OperationTops "+
-				"INNER JOIN D_SDMs as SDMs "+
-				"ON SDMs.IDSDM = OperationTops.IDSDM "+
-				"INNER JOIN D_Customer as customer "+ 
-				"ON customer.IDCustomer = OperationTops.IDCustomer "+
-				  "WHERE SDMs.IDSDM = ?";
+		String query = "DECLARE @BOEUser nvarchar(255) "+
+				"DECLARE @IDTime int "+
+				"DECLARE @BOEProfile nvarchar(10) "+
+				"DECLARE @Process nvarchar(20) "+
+				"DECLARE @CustomerId int "+
+				"SET @BOEUser = ? "+
+				"SET @IDTime = ? "+
+				"SET @Process = ? "+
+				"SET @CustomerId = ? "+
+				"SET @BOEProfile = ( "+
+					"SELECT D_SDMs.SDMProfile FROM D_SDMs "+
+						"WHERE D_SDMs.SDMBOEFullName = @BOEUser) "+
+				"IF(@BOEProfile = 'VIP') "+
+				"BEGIN "+
+				"SELECT tops.*, smd.SDMShortName "+
+					"FROM F_Operation_TOP as tops "+
+					"INNER JOIN D_SDMs as smd "+
+						"ON smd.IDSDM = tops.IDSDM "+
+						"AND tops.IDTime = @IDTime "+
+						"AND tops.IDCustomer = @CustomerId "+
+						"AND tops.ProcessName = @Process "+
+						"ORDER BY IDOperationTop DESC "+
+				"END "+
+				"ELSE "+
+				"BEGIN "+
+				"SELECT TOP 10 tops.*, smd.SDMShortName "+
+					"FROM F_Operation_TOP as tops "+
+					"INNER JOIN D_SDMs as smd "+
+						"ON smd.IDSDM = tops.IDSDM "+
+							"WHERE smd.SDMBOEFullName = @BOEUser "+
+							"AND tops.IDTime = @IDTime "+
+							"AND tops.IDCustomer = @CustomerId "+
+							"AND tops.ProcessName = @Process "+ 
+							"ORDER BY IDOperationTop DESC END";
+		DBUtil.VerifyConnection(conn);
 		PreparedStatement preparedStatement = conn.prepareStatement(query);
-		preparedStatement.setInt(1, idSDM);
+		preparedStatement.setString(1, sdmName);
+		preparedStatement.setInt(2, timeId);
+		preparedStatement.setString(3, processName);
+		preparedStatement.setInt(4, customerId);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		//ResultSet resultSet = statement.executeQuery(query  + idSDM );
 		while( resultSet.next() ) {
 			OperationModel operation = new OperationModel();
 			operation.setIDOperationTop( resultSet.getInt("IDOperationTop") );
@@ -42,7 +72,7 @@ public class OperationImplementation implements OperationData {
 			operation.setDescription(resultSet.getString("Description" ));
 			operation.setQuantity(Integer.parseInt(resultSet.getString("Quantity" )));
 			operation.setSDMName(resultSet.getString("SDMShortName" ));
-			operation.setCustomerName(resultSet.getString("CName" ));
+			//operation.setCustomerName(resultSet.getString("CName" ));
 			operations.add(operation);
 		}
 		resultSet.close();

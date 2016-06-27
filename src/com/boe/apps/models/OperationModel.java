@@ -15,8 +15,8 @@ public class OperationModel {
 	public String processName;
 	public int customerId;
 	public String customerName;
-	public String description;
 	public int quantity;
+	public String description;
 	
 	/*Id de la operación*/
 	public int getIDOperationTop() {
@@ -67,13 +67,6 @@ public class OperationModel {
 	public void setCustomerName(String customerName){
 		this.customerName = customerName;
 	}
-	/*Descripcion de la operacion*/
-	public String getDescription(){
-		return description;
-	}
-	public void setDescription(String description){
-		this.description = description;
-	}
 	/*ID del SDM que registra la operación*/
 	public int getQuantity(){
 		return quantity;
@@ -81,5 +74,11 @@ public class OperationModel {
 	public void setQuantity(int quantity){
 		this.quantity = quantity;
 	}
-	
+	/*Descripcion de la operacion*/
+	public String getDescription(){
+		return description;
+	}
+	public void setDescription(String description){
+		this.description = description;
+	}
 }
