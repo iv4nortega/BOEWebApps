@@ -84,110 +84,129 @@ public class Operations extends HttpServlet  {
     	{
 			OperationModel operation = new OperationModel();
 			request.setCharacterEncoding("UTF-8");
-			/*Se agrega una condición 
-    		 * para realizar su accion respectiva agregar/editar*/
-    		operation.setIDSDM(Integer.parseInt(request.getParameter("sdmId")));
-			operation.setCustomerId(Integer.parseInt(request.getParameter("selectcustomer")));
-			operation.setProcessName(request.getParameter("processName"));
-			operation.setTimeId(Integer.parseInt(request.getParameter("timeId")));
+			int sdmID = Integer.parseInt(request.getParameter("sdmId"));
+			int customerId = Integer.parseInt(request.getParameter("selectcustomer"));
+			int timeId = Integer.parseInt(request.getParameter("timeId"));
+			String processName = request.getParameter("processName");
+			
+    		operation.setIDSDM(sdmID);
+			operation.setCustomerId(customerId);
+			operation.setProcessName(processName);
+			operation.setTimeId(timeId);
     		String operationId = request.getParameter("operationId");
     		if( operationId == null || operationId.isEmpty()) 
     		{
     			List<OperationModel> listoperation = new ArrayList<OperationModel>();
-    			int sdmID = Integer.parseInt(request.getParameter("sdmId"));
-    			int customerId = Integer.parseInt(request.getParameter("selectcustomer"));
-    			int timeId = Integer.parseInt(request.getParameter("timeId"));
-    			String processName = request.getParameter("processName");
     			
     			OperationModel operationModel1 = new OperationModel();
     			operationModel1.setIDSDM(sdmID);
     			operationModel1.setCustomerId(customerId);
     			operationModel1.setTimeId(timeId);
     			operationModel1.setProcessName(processName);
-    			operationModel1.setQuantity(Integer.parseInt(request.getParameter("quantity1")));
-    			operationModel1.setDescription(request.getParameter("description1"));
-    			listoperation.add(operationModel1);
+    			operationModel1.setQuantity(Integer.parseInt(request.getParameter("quantity0")));
+    			String description0 = request.getParameter("description0"); 
+    			operationModel1.setDescription(description0);
+    			if(!description0.isEmpty()){
+    			listoperation.add(operationModel1);}
     			
     			OperationModel operationModel2 = new OperationModel();
     			operationModel2.setIDSDM(sdmID);
     			operationModel2.setCustomerId(customerId);
     			operationModel2.setTimeId(timeId);
     			operationModel2.setProcessName(processName);
-    			operationModel2.setQuantity(Integer.parseInt(request.getParameter("quantity2")));
-    			operationModel2.setDescription(request.getParameter("description2"));
-    			listoperation.add(operationModel2);
+    			operationModel2.setQuantity(Integer.parseInt(request.getParameter("quantity1")));
+    			String description1 = request.getParameter("description1");
+    			operationModel2.setDescription(description1);
+    			if(!description1.isEmpty()){ listoperation.add(operationModel2);}
     			
     			OperationModel operationModel3 = new OperationModel();
     			operationModel3.setIDSDM(sdmID);
     			operationModel3.setCustomerId(customerId);
     			operationModel3.setTimeId(timeId);
     			operationModel3.setProcessName(processName);
-    			operationModel3.setQuantity(Integer.parseInt(request.getParameter("quantity3")));
-    			operationModel3.setDescription(request.getParameter("description3"));
-    			listoperation.add(operationModel3);
+    			operationModel3.setQuantity(Integer.parseInt(request.getParameter("quantity2")));
+    			String description2 = request.getParameter("description2");
+    			operationModel3.setDescription(description2);
+    			if(!description2.isEmpty()){
+    			listoperation.add(operationModel3);}
     			
     			OperationModel operationModel4 = new OperationModel();
     			operationModel4.setIDSDM(sdmID);
     			operationModel4.setCustomerId(customerId);
     			operationModel4.setTimeId(timeId);
     			operationModel4.setProcessName(processName);
-    			operationModel4.setQuantity(Integer.parseInt(request.getParameter("quantity4")));
-    			operationModel4.setDescription(request.getParameter("description4"));
-    			listoperation.add(operationModel4);
+    			operationModel4.setQuantity(Integer.parseInt(request.getParameter("quantity3")));
+    			String description3 = request.getParameter("description3");
+    			operationModel4.setDescription(description3);
+    			if(!description3.isEmpty()){
+    			listoperation.add(operationModel4);}
     			
     			OperationModel operationModel5 = new OperationModel();
     			operationModel5.setIDSDM(sdmID);
     			operationModel5.setCustomerId(customerId);
     			operationModel5.setTimeId(timeId);
     			operationModel5.setProcessName(processName);
-    			operationModel5.setQuantity(Integer.parseInt(request.getParameter("quantity5")));
-    			operationModel5.setDescription(request.getParameter("description5"));
-    			listoperation.add(operationModel5);
+    			operationModel5.setQuantity(Integer.parseInt(request.getParameter("quantity4")));
+    			String description4 = request.getParameter("description4");
+    			operationModel5.setDescription(description4);
+    			if(!description4.isEmpty()){
+    			listoperation.add(operationModel5);}
     			
     			OperationModel operationModel6 = new OperationModel();
     			operationModel6.setIDSDM(sdmID);
     			operationModel6.setCustomerId(customerId);
     			operationModel6.setTimeId(timeId);
     			operationModel6.setProcessName(processName);
-    			operationModel6.setQuantity(Integer.parseInt(request.getParameter("quantity6")));
-    			operationModel6.setDescription(request.getParameter("description6"));
-    			listoperation.add(operationModel6);
+    			operationModel6.setQuantity(Integer.parseInt(request.getParameter("quantity5")));
+    			String description5 = request.getParameter("description5");
+    			operationModel6.setDescription(description5);
+    			if(!description5.isEmpty()){
+    			listoperation.add(operationModel6);}
     			
     			OperationModel operationModel7 = new OperationModel();
     			operationModel7.setIDSDM(sdmID);
     			operationModel7.setCustomerId(customerId);
     			operationModel7.setTimeId(timeId);
     			operationModel7.setProcessName(processName);
-    			operationModel7.setQuantity(Integer.parseInt(request.getParameter("quantity7")));
-    			operationModel7.setDescription(request.getParameter("description7"));
-    			listoperation.add(operationModel7);
+    			operationModel7.setQuantity(Integer.parseInt(request.getParameter("quantity6")));
+    			String description6 = request.getParameter("description6");
+    			operationModel7.setDescription(description6);
+    			if(!description6.isEmpty()){
+    			listoperation.add(operationModel7);}
     			
     			OperationModel operationModel8 = new OperationModel();
     			operationModel8.setIDSDM(sdmID);
     			operationModel8.setCustomerId(customerId);
     			operationModel8.setTimeId(timeId);
     			operationModel8.setProcessName(processName);
-    			operationModel8.setQuantity(Integer.parseInt(request.getParameter("quantity8")));
-    			operationModel8.setDescription(request.getParameter("description8"));
-    			listoperation.add(operationModel8);
+    			operationModel8.setQuantity(Integer.parseInt(request.getParameter("quantity7")));
+    			String description7 = request.getParameter("description7");
+    			operationModel8.setDescription(description7);
+    			if(!description7.isEmpty()){
+    			listoperation.add(operationModel8);}
     			
     			OperationModel operationModel9 = new OperationModel();
     			operationModel9.setIDSDM(sdmID);
     			operationModel9.setCustomerId(customerId);
     			operationModel9.setTimeId(timeId);
     			operationModel9.setProcessName(processName);
-    			operationModel9.setQuantity(Integer.parseInt(request.getParameter("quantity9")));
-    			operationModel9.setDescription(request.getParameter("description9"));
-    			listoperation.add(operationModel9);
+    			operationModel9.setQuantity(Integer.parseInt(request.getParameter("quantity8")));
+    			String description8 = request.getParameter("description8");
+    			operationModel9.setDescription(description8);
+    			if(!description8.isEmpty()){
+    			listoperation.add(operationModel9);}
     			
     			OperationModel operationModel10 = new OperationModel();
     			operationModel10.setIDSDM(sdmID);
     			operationModel10.setCustomerId(customerId);
     			operationModel10.setTimeId(timeId);
     			operationModel10.setProcessName(processName);
-    			operationModel10.setQuantity(Integer.parseInt(request.getParameter("quantity10")));
-    			operationModel10.setDescription(request.getParameter("description10"));
-    			listoperation.add(operationModel10);
+    			operationModel10.setQuantity(Integer.parseInt(request.getParameter("quantity9")));
+    			String description9 = request.getParameter("description9");
+    			operationModel10.setDescription(description9);
+    			if(!description9.isEmpty()){
+    			listoperation.add(operationModel10);}
+    			
     			for(OperationModel item : listoperation ){
     				det.createOperation(item);
     			}

@@ -9,7 +9,6 @@ var SDM = window.SDM || {};
 SDM.App = (function ($, window, document, undefined) {
 	/*Variables iniciales*/
 	var idSDMLogged, table = null;
-	
 	/*funcion inicial para sdm carga todos los elementos iniciales*/
 	var Init = function()
 	{
@@ -44,13 +43,13 @@ SDM.App = (function ($, window, document, undefined) {
 	  * of metrics view / llega el ID desde Util.js*/
     var GetCustomerList = function (userId)
     {
+    	$('#form_operation_top').find('#sdmId').val(userId);
     	/*Metodo ajax para listar los clientes por sdm*/
     	$.ajax({ type: 'GET',   
     	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
     	       success : function(data){
 					/*Obtiene el nombre de los procesos*/
 					GetProcessName(userId);
-			    	$('#sdmId').val(userId);
 					var listcustomers = $('#select_customer_filter');
 					listcustomers.find('option').remove().end();
     	            $.each(data, function (index, item) {
@@ -152,29 +151,34 @@ SDM.App = (function ($, window, document, undefined) {
 	        	process = $('#selectmetric').val(),
 	        	customer = $('#select_customer_filter').val(),
 	        	previousperiod = $('#selectperiod option:eq(1)').text();
-	        	$('#previousperiod').html('"' + previousperiod + '" : ' + customerNameSelected);
-	        	
-	        	if(data.data.length != 0 && data != null)
+	        	$('#form_operation_top').find('#processName').val(process);
+	        	$('#form_operation_top').find('#timeId').val($('#selectperiod').val());
+	        	if(data.data.length > 0)
         		{
-	        		$('#form_operation_top').find('#sdmId').val(data.data[0].IDSDM);
-		        	$('#form_operation_top').find('#processName').val(data.data[0].processName);
-		        	$('#form_operation_top').find('#timeId').val($('#selectperiod').val());
+		        	$('#previousperiod').html('del "' + previousperiod + '" : ' + customerNameSelected);
+	 	            $('#form_operation_top').find('#sdmId').val();
 		        	$('.content_registers').remove();
 		        	$('#form_operation_top').find('#timeId').val();
+		        	for(i = 0; i <= 9 ; i++){
+		        		$('#form_operation_top').find('#quantity'+ i).val(0);
+		        		$('#form_operation_top').find('#description'+ i).val((data.data[i] == undefined) ? '': data.data[i].description);
+	        		}
+//		        	var c = 10;
+//		        	$.each(data.data, function(index, item){
+//		        		if(period == item.timeId && process == item.processName && parseFloat(customer) == item.customerId ){
+//		        			var count = c--;
+//		        			$('<div class="content_registers"><div class="large-2 columns">'+
+//		        					'<input type="text" name="quantity'+ count +'" id="quantity'+ count +'" value="0" /></div>'+
+//		        			'<div class="large-10 columns"><input type="text" name="description'+ count +'" id="description'+ count +'" value="'+ 
+//		        			item.description +'" /></div></div>')
+//		        					.insertAfter('.previus_registers').children();
+//		        		}
+//		        	});
         		}
-	        	
-	        			
-	        	var c = 10;
-//	        	$.each(data.data, function(index, item){
-//	        		if(period == item.timeId && process == item.processName && parseFloat(customer) == item.customerId ){
-//	        			var count = c--;
-//	        			$('<div class="content_registers"><div class="large-2 columns">'+
-//	        					'<input type="text" name="quantity'+ count +'" id="quantity'+ count +'" value="0" /></div>'+
-//	        			'<div class="large-10 columns"><input type="text" name="description'+ count +'" id="description'+ count +'" value="'+ 
-//	        			item.description +'" /></div></div>')
-//	        					.insertAfter('.previus_registers').children();
-//	        		}
-//	        	});
+	        	else{
+	        		$('#previousperiod').html('para el cliente ' + customerNameSelected);
+	        		ClearFormOperationTop();
+	        	}
  	       },
          error: function(error){
          	$.notify('No se pudo obtener los registros del periodo anterior.', 'error');
@@ -305,10 +309,8 @@ SDM.App = (function ($, window, document, undefined) {
 		    	    data: 'selectcustomer=' + customer +'&'+ $('#form_operation_top').serialize(),
 		    	    success : function(data){
 		    	    	$('#modal_add_value').css('display', 'none');
-		    	    	$('#form_operation_top').find('#operationId').val('');
-		    	    	$('#form_operation_top').find('#quantity').val('');
-		    	    	$('#form_operation_top').find('#description').val('');
-		    	    	$.notify('El "'+ processName + '" para "'+ customerName  +'" se ha guardado correctamente.', 'success');
+		        		ClearFormOperationTop();
+		    	    	$.notify('Los "'+ processName + '" para "'+ customerName  +'" se ha guardado correctamente.', 'success');
 		    	    	table.ajax.reload();
 		    	    },
 		            error: function(error){
@@ -382,6 +384,12 @@ SDM.App = (function ($, window, document, undefined) {
 	  	    table.ajax.reload();
 	  	}, 30000);
     };
+  	function ClearFormOperationTop(){
+  		for(i = 0; i <= 9 ; i++){
+    		$('#form_operation_top').find('#quantity'+ i).val('0');
+    		$('#form_operation_top').find('#description'+ i).val('');
+		}
+  	};
     /*return of functions globals - call in html*/
 	return {
 		Init: Init, 
