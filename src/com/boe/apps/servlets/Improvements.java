@@ -36,7 +36,10 @@ public class Improvements extends HttpServlet{
 			if(action.equalsIgnoreCase("list_improvements")){
 				response.setContentType("application/json");
 				String userboe =  request.getParameter("user_boe");
-		    	String data = json.serialize(det.getImprovements(userboe));
+				int periodimp =  Integer.parseInt(request.getParameter("periodimp"));
+				int customerimp =  Integer.parseInt(request.getParameter("customerimp"));
+				String typeimp =  request.getParameter("typeimp");
+		    	String data = json.serialize(det.getImprovements(userboe,periodimp,typeimp, customerimp));
 		        out.println("{ \"data\": "+ data + "}");
 			    out.close();
 			}if(action.equalsIgnoreCase("edit")){

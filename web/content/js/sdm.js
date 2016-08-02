@@ -45,8 +45,14 @@ SDM.App = (function ($, window, document, undefined) {
     {
     	$('#form_operation_top').find('#sdmId').val(userId);
     	/*Metodo ajax para listar los clientes por sdm*/
+    	var userBOEUSER = BOEWebApp.GetBOEUserName();
+    	if( userBOEUSER == 'Administrator'){
+    		urlgetCustomer = '../Customers.do?action=list_customers';
+    	}else{ 
+    		urlgetCustomer = '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(); 
+    	}
     	$.ajax({ type: 'GET',   
-    	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
+    	       url: urlgetCustomer,   
     	       success : function(data){
 					/*Obtiene el nombre de los procesos*/
 					GetProcessName(userId);

@@ -88,6 +88,7 @@ public class Opportunities extends HttpServlet {
     		opportunity.setDescription(request.getParameter( "new_record_description" ));
     		opportunity.setType(request.getParameter( "new_record_type_sale" ));
     		opportunity.setIDSDM(Integer.parseInt(request.getParameter( "idsdm" )));
+    		opportunity.setStatus(request.getParameter( "new_record_status_sale" ));
     		String timeTentative = request.getParameter( "new_record_date" ).replace("-", "");
     		opportunity.setIDTimeTentative(Integer.parseInt(timeTentative));
     		/*Fecha Inicial*/

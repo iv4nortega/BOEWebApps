@@ -42,23 +42,23 @@
 	                <div class="large-6 columns">
 	                    <label>Fecha planeada:</label>
 	                    <div class="row collapse postfix-radius">
-		                   	<div class="small-10 columns">
+		                   	<div class="small-12 columns">
 		                   		<input id="date_planned" name="date_planned" class="form-control" maxlength="10" type="text">
 		                   	</div>
-		               		<div class="small-2 columns">
+		               		<!-- <div class="small-2 columns">
 		                   		<span class="postfix"><i class="fa fa-calendar"></i></span>
-		                   	</div>
+		                   	</div> -->
                    		</div>
                     </div>
                     <div class="large-6 columns">
 	                    <label>Fecha real:</label>
 	                    <div class="row collapse postfix-radius">
-		                   	<div class="small-10 columns">
+		                   	<div class="small-12 columns">
 		                   		<input id="date_real" name="date_real" class="form-control" maxlength="10" type="text">
 		                   	</div>
-		               		<div class="small-2 columns">
+		               		<!-- <div class="small-2 columns">
 		                   		<span class="postfix"><i class="fa fa-calendar"></i></span>
-		                   	</div>
+		                   	</div> -->
                    		</div>
                     </div>
                 </div>
@@ -66,12 +66,12 @@
                      <div class="large-6 columns">
 	                    <label>Fecha cierre:</label>
 	                    <div class="row collapse postfix-radius">
-		                   	<div class="small-10 columns">
+		                   	<div class="small-12 columns">
 		                   		<input id="date_close" name="date_close" class="form-control" maxlength="10" type="text">
 		                   	</div>
-		               		<div class="small-2 columns">
+		               		<!-- <div class="small-2 columns">
 		                   		<span class="postfix"><i class="fa fa-calendar"></i></span>
-		                   	</div>
+		                   	</div> -->
                    		</div>
                     </div>
                </div>

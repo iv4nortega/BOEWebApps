@@ -19,15 +19,26 @@ public class ImprovementsImplementation implements ImprovementsData {
 		conn = DBUtil.getConnection();
 	}
 	@Override
-	public List<ImprovementsModel> getImprovements(String user_boe) throws SQLException {
+	public List<ImprovementsModel> getImprovements(String userboe, int periodimp, String typeimp, int customerimp) throws SQLException {
 		List<ImprovementsModel> improvements = new ArrayList<ImprovementsModel>();
-		String query = "SELECT DISTINCT improvements.* "+
-			  "FROM F_Improvements as improvements "+
-			  "INNER JOIN D_SDMs as sdm "+
-			  "ON sdm.IDSDM = improvements.IDSDM "+
-			  "WHERE sdm.SDMBOEFullName =?";
+		String query = "DECLARE @UserBOE VARCHAR(250) = ? " +
+		"SELECT DISTINCT a.* "+
+		 "FROM F_Improvements AS a "+
+		 "INNER JOIN D_SDMs AS b ON b.IDSDM = a.IDSDM "+
+		 "WHERE a.IDTime = ? "+
+	        "AND a.[Type] = ? "+
+	        "AND a.IDCustomer = ? "+
+	        "AND b.SDMBOEFullName = CASE "+
+		    "WHEN (SELECT SDMProfile FROM D_SDMs "+
+		          "WHERE SDMBOEFullName = @UserBOE) = 'VIP' "+
+		    "THEN b.SDMBOEFullName "+
+		    "ELSE @UserBOE "+ 
+		 "END";
 		PreparedStatement preparedStatement = conn.prepareStatement(query);
-		preparedStatement.setString(1, user_boe);
+		preparedStatement.setString(1, userboe);
+		preparedStatement.setInt(2, periodimp);
+		preparedStatement.setString(3, typeimp);
+		preparedStatement.setInt(4, customerimp);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while( resultSet.next() ) {
 			ImprovementsModel improvement = new ImprovementsModel();

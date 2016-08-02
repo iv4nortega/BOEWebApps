@@ -18,6 +18,10 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
     	/*Al presionar el boton de nuevo servicio cierra el modal de 
     	 * nueva oportunidad y muestra el formulario de nuevo servicio
     	 * */
+    	GetStatusColor('#new_record_status_sale');
+    	$('#new_record_status_sale').on('change', function(){
+			GetStatusColor('#'+ this.id);
+		});
     	$('#new_service').on('click', function(){
     		$('#modal_new_record').css('display','none');
     		$('#modal_new_service').css('display', 'block');
@@ -31,7 +35,6 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
     		$('#modal_new_service').css('display', 'none');
 			$('#modal_new_record').css('display','block');
 		});
-		
     	$(document).ajaxStart(function() {
 		    $(".loader").show();
 		}).ajaxStop(function() {
@@ -96,12 +99,7 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	    BOEWebApp.DatePickerGral('#form_new_record','#new_record_date');
 	    BOEWebApp.DatePickerGral('#form_new_record','#new_record_date_start');
 	    BOEWebApp.DatePickerGral('#form_new_record','#new_record_date_end');
-	   	/*Close the modal where hide delete record and new record opportunity*/
-	   	$('.closemodal').on('click', function(){
-	   		$('#modal_delete_record').css('display', 'none');
-	           $('#modal_new_record').css('display', 'none');
-	           window.location.href = "/BOEWebApps/UpCrossSelling/";
-	   	});
+	   	
 	   	/*Confirm delete record modal*/
 	   	$('#delete_confirm_record').on('click', function(){
 			window.location.href = "../Opportunities.do?action=delete&IDUpCrossSelling=" + delIdRecord;
@@ -171,6 +169,13 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		  	      }
 		  	    }
 	  		});
+	  	/*Close the modal where hide delete record and new record opportunity*/
+	   	$('.closemodal').on('click', function(){
+	   		$('#modal_delete_record').css('display', 'none');
+	           $('#modal_new_record').css('display', 'none');
+	           table.ajax.reload();
+	           //window.location.href = "/BOEWebApps/UpCrossSelling/";
+	   	});
 	  	/* Validate form by jquery validate plugin*/
 	  	$('#form_new_record').validate({
 			rules : {
@@ -294,6 +299,10 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 		              '<td>'+ ((data.timeEnd== null) ? '-' : data.timeEnd) +'</td>'+
 	            '</tr>'+
 	            '<tr>'+
+	            	  '<td class="title">Status:</td>'+
+	            	  '<td>'+ data.status +'</td>'+
+	            '</tr>'+
+	            '<tr>'+
 	              	'<td class="title" >Descripción:</td>'+
 	              	'<td colspan="5">'+ data.description +'</td>'+
 	              '</tr>'+
@@ -333,6 +342,8 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	    	   $('#modal_new_record').find('#new_record_description').val(data.description);
 	    	   $('#modal_new_record').find('#new_record_type_sale').val(data.type);
 	    	   $('#modal_new_record').find('#idsdm').val(data.IDSDM);
+	    	   $('#modal_new_record').find('#new_record_status_sale').val(data.status);
+	    	   GetStatusColor('#new_record_status_sale');
 	       },
 	       error: function(error){
 	    	   $.notify("Error al obtener el ID.", "error");
@@ -366,6 +377,20 @@ UpCrossSelling.App = (function ($, window, document, undefined) {
 	        }
 		});
 	};
+	/*Change color */
+	function GetStatusColor(ctrl)
+	{
+		var controlval = $(ctrl).val();
+		if(controlval == "Abierto"){
+    		$('span.status').css('background-color', 'green');
+    	}
+		else if(controlval == "Cerrado"){
+			$('span.status').css('background-color', 'black');
+		}
+		else if(controlval =="Cancelado"){
+			$('span.status').css('background-color', '#e20074');
+		}
+	}
 	/*Get comments */
 	function GetComments(idParentItem)
 	{

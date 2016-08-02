@@ -1,5 +1,4 @@
-/* INITIALIZE LAO.js 
- * PUBLIC API
+/* PUBLIC API
  * @author : Iván Hernández Ortega
  * @create date : 06 de Junio 2016
 */
@@ -15,6 +14,7 @@ BOEWebApp = (function ($, window, document, undefined) {
 	var GetBOEUserName = function(){
 		var frame = top.document.getElementsByName('servletBridgeIframe');
 		var fullusername = $(frame).contents().find('.bannerUserName').text().trim();
+		
 		if(fullusername == null || fullusername == ''){
 			fullusername = userunregistered;
 		}
@@ -70,46 +70,54 @@ BOEWebApp = (function ($, window, document, undefined) {
 			autoclose: true,
 			language: 'es',
 			showAnim: 'slideDown',
-		}).on('change', function(e){
-			var validator = $( form ).validate();
-			validator.element( inputctrl );
-			
-			plannedDate = $('#date_planned').val().split('-');
-			realDate = $('#date_real').val().split('-');
-			closeDate = $('#date_close').val().split('-');
-		    datenow = $('#lao_date').val().split('-');
-		    if (new Date(plannedDate[0], plannedDate[1], plannedDate[2]) <
-		    new Date(datenow[0], datenow[1], datenow[2])) {
-		    	$(status).val(1);
-		    	$(status).css('background-color', '#e20074');
-		    	$(status).css('color', '#fff');
-		    }
-		    if (new Date(plannedDate[0], plannedDate[1], plannedDate[2]) >=
-				    new Date(datenow[0], datenow[1], datenow[2]))
-	    	{
-		    	$(status).val(3);
-		    	$(status).css('background-color', '#66ccff');
-		    	$(status).css('color', '#fff');
-	    	}if(new Date(realDate[0], realDate[1], realDate[2]) <
-	    		    new Date(datenow[0], datenow[1], datenow[2])){
-	    		$(status).val(4);
-		    	$(status).css('background-color', '#4CAF50');
-		    	$(status).css('color', '#fff');
-    		}if(new Date(closeDate[0], closeDate[1], closeDate[2]) <
-	    		    new Date(datenow[0], datenow[1], datenow[2])){
-	    		$(status).val(5);
-		    	$(status).css('background-color', '#000');
-		    	$(status).css('color', '#fff');
-    		}
+			onSelect: function(date){
+				$(inputctrl).val(date);
+				var validator = $( form ).validate();
+				validator.element( inputctrl );
+				
+				plannedDate = $('#date_planned').val().split('-');
+				realDate = $('#date_real').val().split('-');
+				closeDate = $('#date_close').val().split('-');
+			    datenow = $('#lao_date').val().split('-');
+			    if (new Date(plannedDate[0], plannedDate[1], plannedDate[2]) <
+			    new Date(datenow[0], datenow[1], datenow[2])) {
+			    	$(status).val(1);
+			    	$(status).css('background-color', '#e20074');
+			    	$(status).css('color', '#fff');
+			    }
+			    if (new Date(plannedDate[0], plannedDate[1], plannedDate[2]) >=
+					    new Date(datenow[0], datenow[1], datenow[2]))
+		    	{
+			    	$(status).val(3);
+			    	$(status).css('background-color', '#66ccff');
+			    	$(status).css('color', '#fff');
+		    	}if(new Date(realDate[0], realDate[1], realDate[2]) <
+		    		    new Date(datenow[0], datenow[1], datenow[2])){
+		    		$(status).val(4);
+			    	$(status).css('background-color', '#4CAF50');
+			    	$(status).css('color', '#fff');
+	    		}if(new Date(closeDate[0], closeDate[1], closeDate[2]) <
+		    		    new Date(datenow[0], datenow[1], datenow[2])){
+		    		$(status).val(5);
+			    	$(status).css('background-color', '#000');
+			    	$(status).css('color', '#fff');
+	    		}
+			}
 		});
-	};
-	 /*Get list customer for show in select 
+	}
+	/*Get list customer for show in select 
 	  * of metrics view / llega el ID desde Util.js*/
 	var GetCustomerListBySDM = function(selectctrl) 
 	{
+		var userBOEUSER = BOEWebApp.GetBOEUserName();
+    	if( userBOEUSER == 'Administrator'){
+    		urlgetCustomer = '../Customers.do?action=list_customers';
+    	}else{ 
+    		urlgetCustomer = '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(); 
+    	}
 	   	/*Metodo ajax para listar los clientes por sdm*/
 		$.ajax({ type: 'GET',   
-	   	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
+	   	       url: urlgetCustomer,
 	   	       success : function(data){
 	   	    	   var listcustomers = $(selectctrl);
 	   	    	   listcustomers.find('option').remove().end();
@@ -120,6 +128,44 @@ BOEWebApp = (function ($, window, document, undefined) {
 	   	            	   text: item.customerName
 	   	               }, '<option/>'));
 	   	           });
+	   	       },
+	   	       error: function(error){
+	   	    	   $.notify('No se pudo obtener el listado de clientes.', 'error');
+	   	       }
+		});
+	};
+	/*Get list customer for show in select*/
+	var GetFinanceCustomerListBySDM = function(selectctrl_1, selectctrl_2, successFunction) 
+	{
+		var userBOEUSER = BOEWebApp.GetBOEUserName();
+	   	if( userBOEUSER == 'Administrator'){
+	   		urlgetCustomer = '../Customers.do?action=list_customers';
+	   	}else{ 
+	   		urlgetCustomer = '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(); 
+	   	}
+	   	/*Metodo ajax para listar los clientes por sdm*/
+		$.ajax({ type: 'GET',   
+	   	       url: urlgetCustomer,
+	   	       success : function(data){
+	   	    	   var listcustomers1 = $(selectctrl_1);
+	   	    	   var listcustomers2 = $(selectctrl_2);
+	   	    	   listcustomers1.find('option').remove().end();
+	   	           $.each(data, function (index, item) {
+	   	        	   listcustomers1.append(
+	   	               $('<option>', {
+	   	            	   value: item.customerId,
+	   	            	   text: item.customerName
+	   	               }, '<option/>'));
+	   	           });
+	   	           listcustomers2.find('option').remove().end();
+	   	           $.each(data, function (index, item) {
+	   	        	   listcustomers2.append(
+	   	               $('<option>', {
+	   	            	   value: item.customerId,
+	   	            	   text: item.customerName
+	   	               }, '<option/>'));
+	   	           });
+	   	           successFunction();
 	   	       },
 	   	       error: function(error){
 	   	    	   $.notify('No se pudo obtener el listado de clientes.', 'error');
@@ -147,6 +193,7 @@ BOEWebApp = (function ($, window, document, undefined) {
 		GetBOEUserName : GetBOEUserName,
 		OperationGetIdSDM: OperationGetIdSDM,
 		GetCustomerListBySDM: GetCustomerListBySDM,
+		GetFinanceCustomerListBySDM: GetFinanceCustomerListBySDM,
 		GetIDSDMS : GetIDSDMS
 	};
 }(jQuery, window, document, undefined));

@@ -85,13 +85,17 @@ Improvement.App = (function ($, window, document, undefined) {
 	  * of metrics view / llega el ID desde Util.js*/
 	function GetCustomerList()
 	{
+		var userBOEUSER = BOEWebApp.GetBOEUserName();
+    	if( userBOEUSER == 'Administrator'){
+    		urlgetCustomer = '../Customers.do?action=list_customers';
+    	}else{ 
+    		urlgetCustomer = '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(); 
+    	}
 	   	/*Metodo ajax para listar los clientes por sdm*/
 		$.ajax({ type: 'GET',   
-	   	       url: '../Customers.do?action=list_customers_by_sdm&sdmName=' + BOEWebApp.GetBOEUserName(),   
+	   	       url: urlgetCustomer,   
 	   	       success : function(data){
 	   	    	   GetSDMByUserName();
-	   	    	   /* Dibuja la tabla de operaciones */
-	   	    	   DrawDataTable();
 	   	    	   var listcustomers = $('#improvement_customer');
 	   	    	   listcustomers.find('option').remove().end();
 	   	           $.each(data, function (index, item) {
@@ -117,6 +121,7 @@ Improvement.App = (function ($, window, document, undefined) {
     	$.ajax({ type: "GET",   
  	       url: "../SDMs.do?action=list_sdms&BOEUserName=" + BOEWebApp.GetBOEUserName(),   
  	       success : function(data){
+ 	    	  GetTypeImprovements();
  	    	   if(data == null || data.IDSDM == 0){
   	    		  $('.loader').show();
  	    		  $.notify("El usuario con el que ingreso no se encuentra dado de alta.", "warn");
@@ -156,7 +161,9 @@ Improvement.App = (function ($, window, document, undefined) {
 	                    text: item.text
 	                }, '<option/>'));
  	            });
- 	           //$("#improvement_select").prepend("<option value=''></option>").val('');
+ 	            //$("#improvement_select").prepend("<option value=''></option>").val('');
+	 	       	/* Dibuja la tabla de operaciones */
+	 	       	DrawDataTable();
  	       },
          error: function(error){
          	$.notify('No se pudo obtener el listado de clientes.', 'error');
@@ -193,7 +200,9 @@ Improvement.App = (function ($, window, document, undefined) {
     /*Dibuja la tabla apartir del id del usuario que ingresa a la app*/
     function DrawDataTable()
     {
-    	GetTypeImprovements();
+    	var period_ = $("#improvement_selectperiod").val();
+    	var type_ = $("#improvement_select").val();
+    	var customer_ = $("#improvement_customer").val();
     	/*Le asigna el valor del SDM al modal con input hide
     	 * Necesario para realizar las consultas por SDM 
     	 * */
@@ -226,7 +235,10 @@ Improvement.App = (function ($, window, document, undefined) {
     	        sortDescending : ' Descendente'
     	      }
     	    },
-    		ajax: "../Improvements?g=list_improvements&user_boe="+ BOEWebApp.GetBOEUserName(),
+    		ajax: "../Improvements?g=list_improvements&user_boe="+ BOEWebApp.GetBOEUserName() + 
+					"&periodimp=" + period_  + 
+					"&typeimp=" + type_ + 
+					"&customerimp=" + customer_ ,
     	    columns: [
     	        { data: 'description', name: 'improvement_description', width: '80%'},
     	        {
@@ -246,21 +258,26 @@ Improvement.App = (function ($, window, document, undefined) {
     	    ],
     	});
     	/*Busqueda por default del periodo, muestra el periodo actual*/
-    	table.column('timeId:name').search($('#improvement_selectperiod').val()).draw();
 		/*Filtro para process name/metricas al seleccionar metricas*/
 		$('#improvement_select').on('change', function(){
-			/*busqueda al seleccionar las metricas*/
-			table.column('typeImprovement:name').search(this.value).draw();
+			table.ajax.url("../Improvements?g=list_improvements&user_boe="+ BOEWebApp.GetBOEUserName() +
+	    			"&periodimp=" + $("#improvement_selectperiod").val()  + 
+	    			"&typeimp=" + this.value + 
+	    			"&customerimp=" + $("#improvement_customer").val()).load();
 		});
 		/*Filtro para process name/metricas al seleccionar metricas*/
 		$('#improvement_customer').on('change', function(){
-			/*busqueda al seleccionar las metricas*/
-			table.column('customerId:name').search(this.value).draw();
+			table.ajax.url("../Improvements?g=list_improvements&user_boe="+ BOEWebApp.GetBOEUserName() +
+	    			"&periodimp=" + $("#improvement_selectperiod").val()  + 
+	    			"&typeimp=" + $("#improvement_select").val() + 
+	    			"&customerimp=" + this.value).load();
 		});
 		/*Filtro para process name/metricas al seleccionar metricas*/
 		$('#improvement_selectperiod').on('change', function(){
-			/*busqueda al seleccionar las metricas*/
-			table.column('timeId:name').search(this.value).draw();
+			table.ajax.url("../Improvements?g=list_improvements&user_boe="+ BOEWebApp.GetBOEUserName() +
+	    			"&periodimp=" + this.value  + 
+	    			"&typeimp=" + $("#improvement_select").val() + 
+	    			"&customerimp=" + $("#improvement_customer").val()).load();
 		});
 
     	/* Validate form by jquery validate plugin*/

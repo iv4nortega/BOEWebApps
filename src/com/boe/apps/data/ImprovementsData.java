@@ -12,7 +12,7 @@ import com.boe.apps.util.ListItem;
 */
 public interface ImprovementsData {
 
-	public List<ImprovementsModel> getImprovements(String user_boe) throws SQLException;
+	public List<ImprovementsModel> getImprovements(String userboe,int periodimp, String typeimp, int customerimp) throws SQLException;
 	public List<ListItem> getTypeImprovements(String userboe) throws SQLException;
 	public ImprovementsModel getOperationById(int operationId) throws SQLException;
 	public void createImprovement(ImprovementsModel improvement) throws SQLException;

@@ -24,6 +24,7 @@ public class OpportunityModel
 	private String type;
 	private int idSDM;
 	private String SDMName;
+	private String status;
 	
 	/*ID DE OPORTUNITY*/
 	public int getIDUpCrossSelling() {
@@ -143,6 +144,13 @@ public class OpportunityModel
 	}
 	public void setSDMName(String name) {
 		this.SDMName = name;
+	}
+	/*Status de oportunidad*/
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 //	@Override
 //	public String toString() {

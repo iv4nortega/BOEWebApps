@@ -36,6 +36,10 @@
     <servlet-name>Improvements</servlet-name>
     <servlet-class>com.boe.apps.servlets.Improvements</servlet-class>
   </servlet>
+   <servlet>
+  <servlet-name>Finance</servlet-name>
+    <servlet-class>com.boe.apps.servlets.Finance</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>Opportunities</servlet-name>
     <url-pattern>/Opportunities.do</url-pattern>
@@ -67,5 +71,9 @@
   <servlet-mapping>
     <servlet-name>Improvements</servlet-name>
     <url-pattern>/Improvements.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Finance</servlet-name>
+    <url-pattern>/Finance.do</url-pattern>
   </servlet-mapping>
 </web-app>

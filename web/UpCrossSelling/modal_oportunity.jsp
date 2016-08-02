@@ -82,6 +82,24 @@
                </div>
            </div>
            <div class="row">
+               <div class="large-6 columns">
+		           <!--Descripción-->
+		           <label>Status:</label>
+		        <div class="row collapse prefix-radius">
+			        <div class="small-2 columns">
+			          <span class="prefix status">&nbsp;</span>
+			        </div>
+			        <div class="small-10 columns">
+		           <select id="new_record_status_sale" name="new_record_status_sale">
+                       <option value="Abierto">Abierto</option>
+                       <option value="Cerrado">Cerrado</option>
+                       <option value="Cancelado">Cancelado</option>
+                   </select>
+                   </div>
+                </div>
+               </div>
+           </div>
+           <div class="row">
                <div class="large-12 columns">
 		           <!--Descripción-->
 		           <label>Descripción:</label>

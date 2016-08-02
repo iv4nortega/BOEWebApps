@@ -75,12 +75,7 @@ lao.app = (function ($, window, document, undefined) {
     				'warn');
     	};
     	$('.newWindowIcon').hide();
-    	/*CLOSE MODAL*/
-    	$('.closemodal').on('click', function(){
-       		$('#laoModal_delete').css('display', 'none');
-            $('#laoModal').css('display', 'none');
-               window.location.href = "/BOEWebApps/LAO";
-       	});
+    	
     	/*MASK FOR DATE*/
         $('#date_planned').inputmask({
     		mask: 'y-m-d'
@@ -184,6 +179,13 @@ lao.app = (function ($, window, document, undefined) {
         		}
     	    }
     	});
+    	/*CLOSE MODAL*/
+    	$('.closemodal').on('click', function(){
+       		$('#laoModal_delete').css('display', 'none');
+            $('#laoModal').css('display', 'none');
+            table.ajax.reload();   
+            //window.location.href = "/BOEWebApps/LAO";
+       	});
     	$('#lao_table tbody').on('click', 'tr td.details-control', function () {
       		var tr = $(this).closest('tr');
             var row = table.row( tr );
@@ -228,23 +230,23 @@ lao.app = (function ($, window, document, undefined) {
 				},
 				subject: {
 					required: true,
-					maxlength: 150
-				},
-				comments: {
-					required: true,
-					maxlength: 512
-				}
+					maxlength: 150				
+				}//,
+//				comments: {
+//					required: true,
+//					maxlength: 512
+//				}
 			},
 			messages:{
 				date_planned: { required: 'Ingrese la fecha planeada.'},
 				subject: {
 					required: 'Ingrese un asunto.',
 					maxlength: 'Número máximo de caracteres es {0}.'
-				},
-				comments: {
-					required: 'Ingrese una nota.',
-					maxlength: 'Número máximo de caracteres es {0}.'
-				}
+				}//,
+//				comments: {
+//					required: 'Ingrese una nota.',
+//					maxlength: 'Número máximo de caracteres es {0}.'
+//				}
 			}
 		});
     };
